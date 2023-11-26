@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BSripoff">
+    <output-path>$PROJECT_DIR$/out/artifacts/BSripoff</output-path>
+    <root id="archive" name="BSripoff.jar">
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+      <element id="module-output" name="BSRipoff" />
+    </root>
+  </artifact>
+</component>

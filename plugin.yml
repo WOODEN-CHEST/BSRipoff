@@ -1,0 +1,14 @@
+name: BSRipoff
+main: sus.keiger.bsripoff.BSRipoff
+version: 0.0.1
+api-version: '1.20'
+
+commands:
+  manage:
+    description: Command to manage stuff on the server.
+    permission: isOp
+
+permissions:
+  isOp:
+    description: A server operator
+    default: op

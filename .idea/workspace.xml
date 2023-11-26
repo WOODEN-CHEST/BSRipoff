@@ -1,14 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="BSripoff" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="" />
+    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/BSripoff.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Server_API.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-api-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-key-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-logger-slf4j-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-minimessage-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-serializer-ansi-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-serializer-gson-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-serializer-json-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-serializer-legacy-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/adventure-text-serializer-plain-4.14.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/ansi-1.0.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/asm-9.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/asm-commons-9.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/asm-tree-9.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/bungeecord-chat-1.20-R0.1-deprecated+build.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/checker-qual-3.33.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/commons-codec-1.11.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/commons-lang-2.6.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/configurate-core-4.2.0-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/configurate-yaml-4.2.0-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/disruptor-3.4.4.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/error_prone_annotations-2.18.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/examination-api-1.3.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/examination-string-1.3.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/geantyref-1.3.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/httpclient-4.5.13.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/httpcore-4.4.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/jansi-2.4.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/javax.inject-1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/jcl-over-slf4j-1.7.32.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/jline-reader-3.20.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/jline-terminal-3.21.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/jline-terminal-jansi-3.21.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/json-simple-1.1.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/jsr305-3.0.2.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/log4j-iostreams-2.19.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/mapping-io-0.3.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-artifact-3.8.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-builder-support-3.8.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-model-3.8.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-model-builder-3.8.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-repository-metadata-3.8.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-api-1.7.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-connector-basic-1.7.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-impl-1.6.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-provider-3.8.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-spi-1.7.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-transport-http-1.7.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/maven-resolver-util-1.7.3.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/mysql-connector-j-8.1.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-all-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-dns-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-haproxy-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-http-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-http2-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-memcache-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-mqtt-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-redis-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-smtp-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-socks-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-stomp-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-codec-xml-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-handler-proxy-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-handler-ssl-ocsp-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-resolver-dns-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-resolver-dns-classes-macos-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-resolver-dns-native-macos-4.1.87.Final-osx-aarch_64.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-resolver-dns-native-macos-4.1.87.Final-osx-x86_64.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-transport-classes-kqueue-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-transport-native-kqueue-4.1.87.Final-osx-aarch_64.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-transport-native-kqueue-4.1.87.Final-osx-x86_64.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-transport-rxtx-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-transport-sctp-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/netty-transport-udt-4.1.87.Final.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/org.eclipse.sisu.inject-0.3.5.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/paper-mojangapi-1.20.2-R0.1-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/plexus-interpolation-1.26.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/plexus-utils-3.3.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/protobuf-java-3.21.9.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/purpur-api-1.20.2-R0.1-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/rhino-1.7.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/rhino-engine-1.7.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/rhino-runtime-1.7.14.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/sentry-5.4.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/snakeyaml-2.2.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/sqlite-jdbc-3.42.0.1.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/terminalconsoleappender-1.3.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/upnp4j-1.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Server API/velocity-native-3.1.2-SNAPSHOT.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/ServerCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BSRipoff.iml" beforeDir="false" afterPath="$PROJECT_DIR$/BSRipoff.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2WUQEQtloJJBiFSN64m305GJh1o" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -19,7 +143,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "D:/Workstations/Programming/Projects/BSRipoff/plugin.yml",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -32,5 +162,9 @@
       <updated>1696784567347</updated>
     </task>
     <servers />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
