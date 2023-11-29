@@ -17,3 +17,5 @@ public enum ServerPlayerState
     IN_GAME,
     SPECTATING
 }
+
+// as always, i have no fucking clue if anything here works or wont break everything just because i didnt write one word
