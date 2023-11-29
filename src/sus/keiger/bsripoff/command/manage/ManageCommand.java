@@ -31,7 +31,7 @@ public class ManageCommand extends ServerCommand
         {
             if (ServerManager.GetLobbyLocation() == null)
             {
-                data.SetFeedback("Lobby location bist klaber nicht set yet.");
+                data.SetFeedback("Lobby location bist klaber nicht set yet."); // lmfao
                 data.SetStatus(CommandStatus.Errored);
                 return;
             }

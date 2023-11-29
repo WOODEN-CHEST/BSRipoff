@@ -29,6 +29,11 @@ public class BSRipoff extends JavaPlugin
         getServer().getPluginManager().registerEvents(_eventListener, this);
         _manageCommand = new ManageCommand();
     }
+    @Override
+    public void onDisable()
+    {
+        // add shit that happen when plugin/server disabled
+    }
 
 
     // Static methods.
