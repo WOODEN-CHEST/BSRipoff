@@ -8,7 +8,7 @@ public class BSRipoffPlayer
     private Player _mcPlayer;
 
 
-    // Constructorq.
+    // Constructors.
     public BSRipoffPlayer(Player mcPlayer)
     {
         if (mcPlayer == null)
