@@ -1,11 +1,8 @@
 package sus.keiger.bsripoff.command;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.util.RGBLike;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -17,7 +14,7 @@ public class CommandData
     private List<String> _tabRecommendations;
     private TextComponent _feedbackComponents;
     private String _feedbackString;
-    private CommandStatus _status = CommandStatus.Complete;
+    private CommandStatus _status = CommandStatus.Successful;
     private final CommandSender _sender;
 
 
@@ -77,7 +74,7 @@ public class CommandData
         }
         if (_feedbackString != null)
         {
-            NamedTextColor Color = _status == CommandStatus.Complete ?
+            NamedTextColor Color = _status == CommandStatus.Successful ?
                     NamedTextColor.WHITE : NamedTextColor.RED;
 
             switch (_status)

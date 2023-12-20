@@ -2,22 +2,46 @@ package sus.keiger.bsripoff;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
 import java.util.HashMap;
 
 public class ServerManager
 {
-    // Private fields.
-    private static Location _lobbySpawnLocation;
+    // Fields.
+    public final World Overworld;
+    public final World TheNether;
+    public final World TheEnd;
 
-    private static final HashMap<Player, BSRipoffPlayer> _bsrPlayers = new HashMap<>();
+
+    // Private static fields.
+    private Location _lobbySpawnLocation;
+    private final HashMap<Player, BSRipoffPlayer> _bsrPlayers = new HashMap<>();
+
+
+    // Constructors.
+    public ServerManager()
+    {
+        Overworld = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("overworld"));
+        TheNether = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_nether"));
+        TheEnd = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_end"));
+    }
 
 
     // Methods.
-    public static void SetLobbyLocation(Location location)
+    /* Server. */
+    public Server GetServer()
+    {
+        return BSRipoff.GetServer();
+    }
+
+    /* Lobby. */
+    public void SetLobbyLocation(Location location)
     {
         if (location == null)
         {
@@ -27,12 +51,13 @@ public class ServerManager
         _lobbySpawnLocation = location;
     }
 
-    public static Location GetLobbyLocation()
+    public Location GetLobbyLocation()
     {
         return  _lobbySpawnLocation;
     }
 
-    public static BSRipoffPlayer GetBSRipoffPlayer(Player mcPlayer)
+    /* Players. */
+    public BSRipoffPlayer GetBSRipoffPlayer(Player mcPlayer)
     {
         if (mcPlayer == null)
         {
@@ -42,21 +67,36 @@ public class ServerManager
         return _bsrPlayers.get(mcPlayer);
     }
 
-    public static World GetOverworld()
+    public void AddBSRipoffPlayer(Player mcPlayer)
     {
-        return BSRipoff.GetPlugin().getServer().getWorld(
-                new NamespacedKey(NamespacedKey.MINECRAFT, "overworld"));
+        if (_bsrPlayers.containsKey(mcPlayer))
+        {
+            return;
+        }
+
+        BSRipoffPlayer BSRPlayer = new BSRipoffPlayer(mcPlayer);
+        _bsrPlayers.put(mcPlayer, BSRPlayer);
     }
 
-    public static World GetTheNether()
+    public void RemoveBSRipoffPlayer(Player mcPlayer)
     {
-        return BSRipoff.GetPlugin().getServer().getWorld(
-                new NamespacedKey(NamespacedKey.MINECRAFT, "the_nether"));
+        _bsrPlayers.remove(mcPlayer);
     }
 
-    public static World GetTheEnd()
+    public void RemoveBSRipoffPlayer(BSRipoffPlayer bsrPlayer)
     {
-        return BSRipoff.GetPlugin().getServer().getWorld(
-                new NamespacedKey(NamespacedKey.MINECRAFT, "the_end"));
+        _bsrPlayers.remove(bsrPlayer.MCPlayer);
+    }
+
+    public void OnPlayerJoinEvent(PlayerJoinEvent event)
+    {
+        AddBSRipoffPlayer(event.getPlayer());
+        BSRipoff.GetLogger().warning("Player joined. Now have %d players.".formatted(_bsrPlayers.size()));
+    }
+
+    public void OnPlayerQuitEvent(PlayerQuitEvent event)
+    {
+        RemoveBSRipoffPlayer(event.getPlayer());
+        BSRipoff.GetLogger().warning("Player left. Now have %d players.".formatted(_bsrPlayers.size()));
     }
 }

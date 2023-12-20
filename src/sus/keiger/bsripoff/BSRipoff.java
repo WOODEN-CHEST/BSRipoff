@@ -1,13 +1,20 @@
 package sus.keiger.bsripoff;
 
+import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
-import sus.keiger.bsripoff.command.manage.ManageCommand;
+
+import java.util.Random;
+import java.util.logging.Logger;
 
 public class BSRipoff extends JavaPlugin
 {
+    // Fields.
+    public final ServerManager Manager;
+    public final Random Rng = new Random();
+
+
     // Private static fields.
     private static BSRipoff s_pluginInstance;
-    private ManageCommand _manageCommand;
 
 
     // Private fields.
@@ -19,21 +26,35 @@ public class BSRipoff extends JavaPlugin
     public BSRipoff()
     {
         s_pluginInstance = this;
+        Manager = new ServerManager();
     }
-
-
-    // Inherited .
-    @Override
-    public void onEnable()
-    {
-        getServer().getPluginManager().registerEvents(_eventListener, this);
-        _manageCommand = new ManageCommand();
-    }
-
 
     // Static methods.
     public static BSRipoff GetPlugin()
     {
         return s_pluginInstance;
+    }
+
+    public static ServerManager GetServerManager()
+    {
+        return s_pluginInstance.Manager;
+    }
+
+    public static Server GetServer()
+    {
+        return s_pluginInstance.getServer();
+    }
+
+    public static Logger GetLogger()
+    {
+        return GetServer().getLogger();
+    }
+
+
+    // Inherited methods.
+    @Override
+    public void onEnable()
+    {
+        getServer().getPluginManager().registerEvents(_eventListener, this);
     }
 }

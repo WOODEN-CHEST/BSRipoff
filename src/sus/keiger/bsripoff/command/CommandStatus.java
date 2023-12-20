@@ -2,8 +2,8 @@ package sus.keiger.bsripoff.command;
 
 public enum CommandStatus
 {
-    Complete,
+    Successful,
     Incomplete,
     Invalid,
-    Errored
+    Error
 }
