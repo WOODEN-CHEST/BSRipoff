@@ -39,6 +39,11 @@ public class BSRipoff extends JavaPlugin
     {
         return s_pluginInstance.Manager;
     }
+    @Override
+    public void onDisable()
+    {
+        // add shit that happen when plugin/server disabled
+    }
 
     public static Server GetServer()
     {
