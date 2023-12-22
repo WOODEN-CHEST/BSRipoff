@@ -2,6 +2,7 @@ package sus.keiger.bsripoff;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
+import sus.keiger.bsripoff.command.manage.ManageCommand;
 
 import java.util.Random;
 import java.util.logging.Logger;
@@ -9,7 +10,7 @@ import java.util.logging.Logger;
 public class BSRipoff extends JavaPlugin
 {
     // Fields.
-    public final ServerManager Manager;
+    public ServerManager Manager;
     public final Random Rng = new Random();
 
 
@@ -26,7 +27,6 @@ public class BSRipoff extends JavaPlugin
     public BSRipoff()
     {
         s_pluginInstance = this;
-        Manager = new ServerManager();
     }
 
     // Static methods.
@@ -61,5 +61,7 @@ public class BSRipoff extends JavaPlugin
     public void onEnable()
     {
         getServer().getPluginManager().registerEvents(_eventListener, this);
+        Manager = new ServerManager();
+        ManageCommand.CreateCommand();
     }
 }

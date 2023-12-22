@@ -1,0 +1,1 @@
+Player selector suggests nothing when anything is typed into it.

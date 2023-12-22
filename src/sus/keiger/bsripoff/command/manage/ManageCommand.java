@@ -1,179 +1,99 @@
 package sus.keiger.bsripoff.command.manage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import sus.keiger.bsripoff.command.CommandData;
-import sus.keiger.bsripoff.command.CommandStatus;
-import sus.keiger.bsripoff.command.ServerCommand;
+import sus.keiger.bsripoff.BSRipoff;
+import sus.keiger.bsripoff.command.*;
+import sus.keiger.bsripoff.player.BSRPlayerState;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 
-public class ManageCommand extends ServerCommand
+public class ManageCommand
 {
-    // Private fields.
-    private final String _spawnKeyword = "spawn";
-    private final String _setKeyword = "set";
-    private final String _gotoKeyword = "goto";
-    private final String _stateKeyword = "state";
-
-
-    // Constructors.
-    public ManageCommand()
+    public static ServerCommand CreateCommand()
     {
-        super("manage");
+        ServerCommand Command = new ServerCommand("manage", null);
+
+        /* State node. */
+        CommandNode StateNode = new KeywordNode("state", null);
+        CommandNode StateGetNode = new KeywordNode("get", null);
+        StateNode.AddSubNode(StateGetNode);
+        CommandNode StateSetNode = new KeywordNode("set", null);
+        StateNode.AddSubNode(StateSetNode);
+
+        CommandNode StateGetSelectorNode = new PlayerSelectorNode(true, 1, ManageCommand::GetState);
+        StateGetNode.AddSubNode(StateGetSelectorNode);
+
+        CommandNode StateSetSelectorNode = new PlayerSelectorNode(true, 1, null);
+        StateSetNode.AddSubNode(StateSetSelectorNode);
+
+        CommandNode StateSelectSetNode = new ListNode(ManageCommand::SetState,
+                BSRPlayerState.InLobby.toString(), BSRPlayerState.InGame.toString());
+        StateSetSelectorNode.AddSubNode(StateSelectSetNode);
+
+
+        // Add root nodes.
+        Command.AddSubNode(StateNode);
+
+        return Command;
     }
 
 
-    // Private methods.
-    /* Executing command. */
-//    private void ParseSpawn(CommandData data)
-//    {
-//        if (data.GetLength() == 1)
-//        {
-//            if (ServerManager.GetLobbyLocation() == null)
-//            {
-//                data.SetFeedback("Lobby location bist klaber nicht set yet.");
-//                data.SetStatus(CommandStatus.Error);
-//                return;
-//            }
-//
-//            data.SetFeedback("Lobby location sind %.2fX %.2fY %.2fZ %.2f° %.2f° in %s"
-//                    .formatted(ServerManager.GetLobbyLocation().getX(),
-//                            ServerManager.GetLobbyLocation().getY(),
-//                            ServerManager.GetLobbyLocation().getZ(),
-//                            ServerManager.GetLobbyLocation().getPitch(),
-//                            ServerManager.GetLobbyLocation().getYaw(),
-//                            ServerManager.GetLobbyLocation().getWorld().getName()));
-//            return;
-//        }
-//
-//        switch (data.GetArgs()[1])
-//        {
-//            case _setKeyword:
-//                SetSpawn(data);
-//                break;
-//
-//            case _gotoKeyword:
-//                GotoSpawn(data);
-//
-//            default:
-//                data.SetStatus(CommandStatus.Invalid);
-//                data.SetFeedback("Unknown kommanded argumentieren \"%s\"".formatted(data.GetArgs()[1]));
-//        }
-//    }
-//
-//    private void SetSpawn(CommandData data)
-//    {
-//        if (!(data.GetSender() instanceof Entity))
-//        {
-//            data.SetFeedback("Cannot set spawn position because command sender is not an entity!");
-//            data.SetStatus(CommandStatus.Invalid);
-//        }
-//
-//        ServerManager.SetLobbyLocation(((Entity)data.GetSender()).getLocation());
-//        data.SetFeedback("Set the spawn location to %.2fX %.2fY %.2fZ %.2f° %.2f° in %s"
-//                .formatted(ServerManager.GetLobbyLocation().getX(),
-//                        ServerManager.GetLobbyLocation().getY(),
-//                        ServerManager.GetLobbyLocation().getZ(),
-//                        ServerManager.GetLobbyLocation().getPitch(),
-//                        ServerManager.GetLobbyLocation().getYaw(),
-//                        ServerManager.GetLobbyLocation().getWorld().getName()));
-//    }
-//
-//    private void GotoSpawn(CommandData data)
-//    {
-//        if (!(data.GetSender() instanceof Entity))
-//        {
-//            return;
-//        }
-//
-//        if (ServerManager.GetLobbyLocation() == null)
-//        {
-//            data.SetStatus(CommandStatus.Error);
-//            data.SetFeedback("Spawn location not set");
-//            return;
-//        }
-//
-//        ((Entity)data.GetSender()).teleport(ServerManager.GetLobbyLocation());
-//        data.SetFeedback("Teleported to lobby!");
-//    }
-
-    private void ExecuteStateCommand(CommandData data)
+    // Private static methods.
+    @SuppressWarnings("unchecked")
+    private static void GetState(CommandData data, List<Object> parsedData)
     {
-//        if (data.GetLength() == 1)
-//        {
-//            data.SetStatus(CommandStatus.Incomplete);
-//            data.SetFeedback("Expected player selector.");
-//            return;
-//        }
-//
-//        List<Player> SelectedPlayers = ServerCommand.SelectPlayers(data.GetArgs()[1], data.GetSender());
-//
-//        if (SelectedPlayers.size() == 0)
-//        {
-//            data.SetStatus(CommandStatus.Error);
-//            data.SetFeedback("No players found matching the selector.");
-//            return;
-//        }
-//
-//        if (data.GetLength() == 2)
-//        {
-//            data.SetStatus(CommandStatus.Incomplete);
-//            data.SetFeedback("No players found matching the selector.");
-//            return;
-//        }
-//        if (data.GetArgs()[1])
-//        {
-//            data.SetStatus(CommandStatus.Incomplete);
-//            data.SetFeedback("Expected player selector.");
-//            return;
-//        }
-    }
+        HashSet<Player> Players = (HashSet<Player>)parsedData.get(0);
 
-
-    /* Suggesting command. */
-    private void SuggestState(CommandData data)
-    {
-
-    }
-
-
-    // Inherited methods.
-    @Override
-    protected void ExecuteCommand(CommandData data)
-    {
-        if (data.GetLength() == 0)
+        if (Players.size() == 0)
         {
-            data.SetFeedback("");
-            data.SetStatus(CommandStatus.Incomplete);
-            return;
+            data.FeedbackString = "No players found";
+            data.SetStatus(CommandStatus.Unsuccessful);
         }
-
-        switch (data.GetArgs()[0])
+        else if (Players.size() > 1)
         {
-            case _stateKeyword:
-                ExecuteStateCommand(data);
-                break;
-
-            default:
-                data.SetFeedback("Unknown command kitger. Use deine brain");
-                data.SetStatus(CommandStatus.Invalid);
-                break;
+            data.FeedbackString = "Expected 1 player, got %d".formatted(Players.size());
+            data.SetStatus(CommandStatus.Unsuccessful);
+        }
+        else
+        {
+            Player MCPlayer = Players.iterator().next();
+            data.FeedbackString = "State of player %s is \"%s\"".formatted(
+                    MCPlayer.getName(), BSRipoff.GetServerManager().GetBSRipoffPlayer(MCPlayer).GetState().toString()
+            );
         }
     }
 
-    @Override
-    protected void TabCommand(CommandData data)
+    @SuppressWarnings("unchecked")
+    private static void SetState(CommandData data, List<Object> parsedData)
     {
-        if (data.GetLength() < 1)
+        // Index 0 = Players, Index 1 = mode
+        HashSet<Player> Players = (HashSet<Player>)parsedData.get(0);
+        String StateString = (String)parsedData.get(1);
+
+        BSRPlayerState State = BSRPlayerState.valueOf(StateString);
+
+        for (Player MCPlayer : Players)
         {
-            data.SetRecommendations(List.of(_setKeyword));
+            BSRipoff.GetServerManager().GetBSRipoffPlayer(MCPlayer).SetState(State);
         }
 
-        if (data.GetArgs()[0].equals(_setKeyword))
+        if (Players.size() == 0)
         {
-            SuggestState(data);
+            data.FeedbackString = "No players found";
+            data.SetStatus(CommandStatus.Unsuccessful);
+        }
+        else if (Players.size() == 1)
+        {
+            data.FeedbackString = "Set the state of %s to \"%s\"".formatted(
+                    Players.iterator().next().getName(), StateString);
+        }
+        else
+        {
+            data.FeedbackString = "Set the state of %d players to \"%s\"".formatted(Players.size(), StateString);
         }
     }
 }

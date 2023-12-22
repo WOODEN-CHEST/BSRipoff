@@ -1,0 +1,21 @@
+package sus.keiger.bsripoff.command;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+@Override
+public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) 
+{
+	if (cmd.getName().equalsIgnoreCase("party")) 
+    { 
+        if (sender instanceof _mcPlayer)
+        {
+            // player can invite other players to party (create new array? list? that contains all players in one party)
+        }
+        // If the player typed /basic then do the following, note: If you only registered this executor for one command, you don't need this
+		// doSomething
+		return true;
+	} //If this has happened the function will return true. 
+        // If this hasn't happened the value of false will be returned.
+	return false; 
+}

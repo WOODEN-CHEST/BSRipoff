@@ -12,6 +12,7 @@ import sus.keiger.bsripoff.BSRipoff;
 public abstract class Kit
 {
     // Static fields.
+    /* Attributes. */
     public static final double MIN_MAX_HEALTH = 0d;
     public static final double MAX_MAX_HEALTH = 1000d;
     public static final double MIN_MOVEMENT_SPEED = 0d;
@@ -24,6 +25,9 @@ public abstract class Kit
     public static final double MAX_ARMOR = 20d;
     public static final double MIN_KNOCKBACK_RESISTANCE =0d;
     public static final double MAX_KNOCKBACK_RESISTANCE = 1d;
+
+    /* Kits. */
+    public static final Kit SWARD = new SwardKit();
 
 
     // Fields.
@@ -68,6 +72,7 @@ public abstract class Kit
         instance.MCPlayer.clearTitle();
 
         instance.MCPlayer.setGameMode(GameMode.SURVIVAL);
+        instance.MCPlayer.setHealth(_maxHealth);
 
         instance.MCPlayer.setVelocity(new Vector(0d, 0d, 0d));
         instance.MCPlayer.setFallDistance(0f);
@@ -82,12 +87,13 @@ public abstract class Kit
 
     public void OnDeath(KitInstance instance)
     {
-
+        instance.MCPlayer.setGameMode(GameMode.SPECTATOR);
     }
 
     public void OnRespawn(KitInstance instance)
     {
-        BSRipoff.Pla
+        instance.MCPlayer.setHealth(_maxHealth);
+        instance.MCPlayer.setGameMode(GameMode.SURVIVAL);
     }
 
     public void StaticTick()

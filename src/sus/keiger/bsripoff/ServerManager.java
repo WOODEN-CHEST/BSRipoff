@@ -27,6 +27,7 @@ public class ServerManager
     // Constructors.
     public ServerManager()
     {
+        BSRipoff.GetLogger().warning("World count: %d".formatted(BSRipoff.GetServer().getWorlds().size()));
         Overworld = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("overworld"));
         TheNether = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_nether"));
         TheEnd = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_end"));

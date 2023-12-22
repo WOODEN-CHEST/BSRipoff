@@ -3,23 +3,30 @@ package sus.keiger.bsripoff.command;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
 public class CommandData
 {
+    // Fields.
+    public final String Label;
+    public final String Command;
+    public final CommandSender Sender;
+    public TextComponent FeedbackComponents = null;
+    public String FeedbackString = null;
+    public List<String> _tabRecommendations = null;
+    int Index = 0;
+
+
     // Private fields.
-    private String[] _args;
-    private List<String> _tabRecommendations;
-    private TextComponent _feedbackComponents;
-    private String _feedbackString;
     private CommandStatus _status = CommandStatus.Successful;
-    private final CommandSender _sender;
+
 
 
     // Constructors.
-    public CommandData(String[] args, CommandSender sender)
+    public CommandData(String label, String[] args, CommandSender sender)
     {
         if (args == null)
         {
@@ -29,18 +36,18 @@ public class CommandData
         {
             throw new IllegalArgumentException("Sender is null");
         }
+        if (label == null)
+        {
+            throw new IllegalArgumentException("Label is null");
+        }
 
-        _args = args;
-        _sender = sender;
+        Command = String.join(" ", args);
+        Sender = sender;
+        Label = label;
     }
 
 
     // Methods.
-    public String[] GetArgs()
-    {
-        return _args;
-    }
-
     public List<String> GetRecommendations()
     {
         return _tabRecommendations;
@@ -50,50 +57,28 @@ public class CommandData
     {
         if (recommendations == null)
         {
-            throw new IllegalArgumentException("Recommendations are null");
+            throw new NullArgumentException("Recommendations are null");
         }
 
         _tabRecommendations = recommendations;
     }
 
-    public void SetFeedback(TextComponent text)
-    {
-        _feedbackComponents = text;
-    }
-
-    public void SetFeedback(String text)
-    {
-        _feedbackString = text;
-    }
-
     public TextComponent GetFeedback()
     {
-        if (_feedbackComponents != null)
+        if (FeedbackComponents != null)
         {
-            return _feedbackComponents;
+            return FeedbackComponents;
         }
-        if (_feedbackString != null)
+        if (FeedbackString != null)
         {
             NamedTextColor Color = _status == CommandStatus.Successful ?
                     NamedTextColor.WHITE : NamedTextColor.RED;
 
-            switch (_status)
-            {
-                case Incomplete -> { return Component.text("Incomplete command! %s".formatted(_feedbackString))
-                        .color(Color); }
-                case Invalid -> { return Component.text("Invalid command! %s".formatted(_feedbackString))
-                        .color(Color); }
-                default -> { return Component.text(_feedbackString).color(Color); }
-            }
 
+            return Component.text(FeedbackString).color(Color);
         }
 
         return null;
-    }
-
-    public int GetLength()
-    {
-        return _args.length;
     }
 
     public void SetStatus(CommandStatus status)
@@ -111,8 +96,29 @@ public class CommandData
         return _status;
     }
 
-    public CommandSender GetSender()
+    public boolean IsMoreDataAvailable()
     {
-        return _sender;
+        return Index < Command.length();
+    }
+
+    public void MoveIndexToNextNonWhitespace()
+    {
+        while ((Index < Command.length()) && (Character.isWhitespace(Command.charAt(Index))))
+        {
+            Index++;
+        }
+    }
+
+    public String ReadWord()
+    {
+        StringBuilder WordBuilder = new StringBuilder();
+
+        while ((Index < Command.length()) && !Character.isWhitespace(Command.charAt(Index)))
+        {
+            WordBuilder.append(Command.charAt(Index));
+            Index++;
+        }
+
+        return WordBuilder.toString();
     }
 }
