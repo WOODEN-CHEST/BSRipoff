@@ -27,10 +27,10 @@ public class ServerManager
     // Constructors.
     public ServerManager()
     {
-        BSRipoff.GetLogger().warning("World count: %d".formatted(BSRipoff.GetServer().getWorlds().size()));
         Overworld = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("overworld"));
         TheNether = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_nether"));
         TheEnd = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_end"));
+        _lobbySpawnLocation = new Location(Overworld, 0d, 0d, 0d);
     }
 
 
@@ -52,7 +52,7 @@ public class ServerManager
         _lobbySpawnLocation = location;
     }
 
-    public Location GetLobbyLocation()
+    public Location GetSpawnLocation()
     {
         return  _lobbySpawnLocation;
     }
@@ -92,12 +92,10 @@ public class ServerManager
     public void OnPlayerJoinEvent(PlayerJoinEvent event)
     {
         AddBSRipoffPlayer(event.getPlayer());
-        BSRipoff.GetLogger().warning("Player joined. Now have %d players.".formatted(_bsrPlayers.size()));
     }
 
     public void OnPlayerQuitEvent(PlayerQuitEvent event)
     {
         RemoveBSRipoffPlayer(event.getPlayer());
-        BSRipoff.GetLogger().warning("Player left. Now have %d players.".formatted(_bsrPlayers.size()));
     }
 }

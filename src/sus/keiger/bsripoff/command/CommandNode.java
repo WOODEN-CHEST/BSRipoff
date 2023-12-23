@@ -112,6 +112,7 @@ public abstract class CommandNode
             for (CommandNode SubNode : _subNodes)
             {
                 Suggestions.addAll(SubNode.GetSelfSuggestions(data));
+                data.Index = SavedIndex;
             }
 
             data.SetRecommendations(Suggestions);
@@ -131,7 +132,10 @@ public abstract class CommandNode
             throw new NullArgumentException("subNode is null");
         }
 
-        _subNodes.add(subNode);
+        if (!_subNodes.contains(subNode))
+        {
+            _subNodes.add(subNode);
+        }
     }
 
 
@@ -142,25 +146,29 @@ public abstract class CommandNode
     // Private methods.
     private void TellExecuteError(CommandData data, List<Object> parsedData)
     {
-        if (_subNodes.size() == 0)
+        // No executor and no sub-nodes.
+        if ((_subNodes.size() == 0) && (Executor == null))
         {
             data.SetStatus(CommandStatus.Unsuccessful);
             data.FeedbackString = "Badly formatted command node: no sub-nodes and no executor. " +
                     "This is a bug and should be reported to the server's admins.";
-            BSRipoff.GetLogger().warning(("Badly made command? Command \"%s\" with args".formatted(data.Label) +
+            BSRipoff.GetLogger().warning(("Badly made command? Command \"%s\" with args ".formatted(data.Label) +
                     "\"%s\" got a case with no executor and no sub-nodes.").formatted(data.Command));
             return;
         }
 
+        // Regular error.
         List<String> Suggestions = new ArrayList<>();
+        int SavedIndex = data.Index;
         for (CommandNode SubNode : _subNodes)
         {
             Suggestions.addAll(SubNode.GetSelfSuggestions(data));
+            data.Index = SavedIndex;
         }
 
         data.SetStatus(CommandStatus.Unsuccessful);
         data.FeedbackString = "%s! Expected [%s]".formatted(
-                data.Command.trim().equals("") ? "Incomplete command" : "Invalid command",
+                data.Command.substring(data.Index).trim().equals("") ? "Incomplete command" : "Invalid command",
                 String.join(" | ",  Suggestions)
         );
     }

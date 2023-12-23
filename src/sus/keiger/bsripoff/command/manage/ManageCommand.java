@@ -1,12 +1,12 @@
 package sus.keiger.bsripoff.command.manage;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.command.*;
 import sus.keiger.bsripoff.player.BSRPlayerState;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,7 +17,18 @@ public class ManageCommand
     {
         ServerCommand Command = new ServerCommand("manage", null);
 
-        /* State node. */
+        // Add nodes.
+        Command.AddSubNode(CreateStateNode());
+        Command.AddSubNode(CreateSpawnNode());
+
+        return Command;
+    }
+
+
+    // Private static methods.
+    /* Creation. */
+    private static CommandNode CreateStateNode()
+    {
         CommandNode StateNode = new KeywordNode("state", null);
         CommandNode StateGetNode = new KeywordNode("get", null);
         StateNode.AddSubNode(StateGetNode);
@@ -34,15 +45,27 @@ public class ManageCommand
                 BSRPlayerState.InLobby.toString(), BSRPlayerState.InGame.toString());
         StateSetSelectorNode.AddSubNode(StateSelectSetNode);
 
-
-        // Add root nodes.
-        Command.AddSubNode(StateNode);
-
-        return Command;
+        return StateNode;
     }
 
+    private static CommandNode CreateSpawnNode()
+    {
+        CommandNode SpawnNode = new KeywordNode("spawn", null);
 
-    // Private static methods.
+        CommandNode GetNode = new KeywordNode("get", ManageCommand::GetSpawn);
+        SpawnNode.AddSubNode(GetNode);
+        CommandNode SetNode = new KeywordNode("set", null);
+        SpawnNode.AddSubNode(SetNode);
+        CommandNode GotoNode = new KeywordNode("goto", ManageCommand::GotoSpawn);
+        SpawnNode.AddSubNode(GotoNode);
+
+        CommandNode LocationDataNode = new LocationNode(CommandOption.Optional, ManageCommand::SetSpawn);
+        SetNode.AddSubNode(LocationDataNode);
+
+        return SpawnNode;
+    }
+
+    /* Functionality. */
     @SuppressWarnings("unchecked")
     private static void GetState(CommandData data, List<Object> parsedData)
     {
@@ -94,6 +117,35 @@ public class ManageCommand
         else
         {
             data.FeedbackString = "Set the state of %d players to \"%s\"".formatted(Players.size(), StateString);
+        }
+    }
+
+    private static void GetSpawn(CommandData data, List<Object> parsedData)
+    {
+        data.FeedbackString = "Spawn is at %.2f %.2f %.2f".formatted(
+                BSRipoff.GetServerManager().GetSpawnLocation().getX(),
+                BSRipoff.GetServerManager().GetSpawnLocation().getY(),
+                BSRipoff.GetServerManager().GetSpawnLocation().getZ()
+        ).replace(',', '.');
+    }
+
+    private static void SetSpawn(CommandData data, List<Object> parsedData)
+    {
+        Location NewLocation = (Location)parsedData.get(0);
+
+        BSRipoff.GetServerManager().SetLobbyLocation(NewLocation);
+        data.FeedbackString = "Set the spawn to %.2f %.2f %.2f %.2f° %.2f°".formatted(
+                NewLocation.getX(), NewLocation.getY(), NewLocation.getZ(),
+                NewLocation.getYaw(), NewLocation.getPitch()
+        ).replace(',', '.');
+    }
+
+    private static void GotoSpawn(CommandData data, List<Object> parsedData)
+    {
+        if (data.Sender instanceof Entity EntitySender)
+        {
+            EntitySender.teleport(BSRipoff.GetServerManager().GetSpawnLocation());
+            data.FeedbackString = "Teleported to spawn";
         }
     }
 }

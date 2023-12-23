@@ -121,4 +121,31 @@ public class CommandData
 
         return WordBuilder.toString();
     }
+
+    public int CountWordsLeft()
+    {
+        boolean IsInWord = false;
+        int Count = 0;
+        int LocalIndex = Index;
+
+        while (LocalIndex < Command.length())
+        {
+            if (Character.isWhitespace(Command.charAt(LocalIndex)))
+            {
+                IsInWord = false;
+            }
+            else
+            {
+                if (!IsInWord)
+                {
+                    Count++;
+                }
+                IsInWord = true;
+            }
+
+            LocalIndex++;
+        }
+
+        return Count;
+    }
 }

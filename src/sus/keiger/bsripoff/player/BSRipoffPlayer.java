@@ -31,7 +31,7 @@ public class BSRipoffPlayer
         }
 
         MCPlayer = mcPlayer;
-        SetState(BSRPlayerState.InGame); // CHANGE TO InLobby IN FINAL THING.
+        SetState(BSRPlayerState.InLobby);
         _selectedKit = Kit.SWARD;
     }
 

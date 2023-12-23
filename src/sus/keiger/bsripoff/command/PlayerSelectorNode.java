@@ -150,6 +150,11 @@ public class PlayerSelectorNode extends CommandNode
         }
 
         parsedData.add(SelectedPlayers);
-        return CommandBelongState.BelongComplete;
+
+        if (data.IsMoreDataAvailable())
+        {
+            return CommandBelongState.BelongComplete;
+        }
+        return CommandBelongState.BelongIncomplete;
     }
 }

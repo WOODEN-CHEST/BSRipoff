@@ -9,30 +9,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Created node system for commands. Made KeywordNode, OptionNode, PlayerSelectorNode, LocationNode, NumberNode and StringNode.">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/changes.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandBelongState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/KeywordNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/ListNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/PlayerSelectorNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" afterDir="false" />
+    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players.">
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandOption.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/LocationNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/ServerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/ServerCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/PlayerSelectorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/PlayerSelectorNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/party.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/party.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/playtest/PlaytestCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ServerPlayerState.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,13 +112,21 @@
       <option name="project" value="LOCAL" />
       <updated>1703099213506</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players.">
+      <created>1703285962936</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1703285962937</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Did stuff" />
     <MESSAGE value="Did stuff (47 warning btw)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Did stuff (47 warning btw)" />
+    <MESSAGE value="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -141,11 +135,6 @@
           <url>file://$PROJECT_DIR$/src/sus/keiger/bsripoff/command/ListNode.java</url>
           <line>62</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java</url>
-          <line>82</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
