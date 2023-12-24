@@ -1,5 +1,6 @@
 package sus.keiger.bsripoff;
 
+import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -7,6 +8,8 @@ import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import sus.keiger.bsripoff.game.kit.Kit;
+
 
 public class ServerEventListener implements Listener
 {
@@ -36,5 +39,12 @@ public class ServerEventListener implements Listener
         {
             return;
         }
+    }
+
+    /* Server. */
+    @EventHandler
+    public void OnTickEvent(ServerTickEndEvent event)
+    {
+        Kit.TickKits();
     }
 }

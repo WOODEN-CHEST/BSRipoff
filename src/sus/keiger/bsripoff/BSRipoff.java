@@ -9,6 +9,10 @@ import java.util.logging.Logger;
 
 public class BSRipoff extends JavaPlugin
 {
+    // Static fields.
+    public static final int TICKS_IN_SECOND = 20;
+
+
     // Fields.
     public ServerManager Manager;
     public final Random Rng = new Random();

@@ -1,13 +1,15 @@
 package sus.keiger.bsripoff.game.kit;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.Vector;
-import sus.keiger.bsripoff.BSRipoff;
+
+import java.util.HashMap;
+
 
 public abstract class Kit
 {
@@ -34,6 +36,10 @@ public abstract class Kit
     public final Inventory StartingInventory = Bukkit.createInventory(null, 9 * 4);
 
 
+    // Private static fields.
+    private static final HashMap<Kit,Integer> s_activeKits = new HashMap<>();
+
+
     // Private fields.
     /* Attributes. */
     public double _maxHealth = 20d;
@@ -53,14 +59,58 @@ public abstract class Kit
 
 
     // Constructors.
-    public Kit()
+    public Kit() { }
+
+
+    // Static methods.
+    public static void TickKits()
     {
-        _maxHealth = 4d;
+        for (Kit DefinedKit : s_activeKits.keySet())
+        {
+            DefinedKit.StaticTick();
+        }
+    }
+
+    public static void MarkKitAsUsed(Kit kit)
+    {
+        if (kit == null)
+        {
+            throw new NullArgumentException("kit is null");
+        }
+
+        if (s_activeKits.containsKey(kit))
+        {
+            s_activeKits.put(kit, s_activeKits.get(kit) + 1);
+        }
+        else
+        {
+            s_activeKits.put(kit, 1);
+        }
+    }
+
+    public static void UnMarkKitAsUsed(Kit kit)
+    {
+        if (kit == null)
+        {
+            throw new NullArgumentException("kit is null");
+        }
+
+        if (!s_activeKits.containsKey(kit))
+        {
+            return;
+        }
+
+        s_activeKits.put(kit, s_activeKits.get(kit) - 1);
+
+        if (s_activeKits.get(kit) <= 0)
+        {
+            s_activeKits.remove(kit);
+        }
     }
 
 
     // Methods.
-    public void OnLoad(KitInstance instance)
+    public void Load(KitInstance instance)
     {
         SetAttributesOfPlayer(instance);
 
@@ -78,6 +128,7 @@ public abstract class Kit
         instance.MCPlayer.setFallDistance(0f);
 
         instance.MCPlayer.getInventory().setContents(StartingInventory.getContents());
+
     }
 
     public void Tick(KitInstance instance)
@@ -153,11 +204,6 @@ public abstract class Kit
         }
     }
 
-    public void OnInventoryChangeEvent(KitInstance instance, InventoryInteractEvent event)
-    {
-
-    }
-
 
     // Protected methods.
     /* Attributes. */
@@ -199,6 +245,7 @@ public abstract class Kit
 
 
     /* Helper methods. */
+    @SuppressWarnings("ConstantConditions")
     protected void SetAttributesOfPlayer(KitInstance instance)
     {
         instance.MCPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(_maxHealth);

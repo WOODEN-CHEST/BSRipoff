@@ -28,4 +28,26 @@ public class KitInstance
         MCPlayer = bsrPlayer.MCPlayer;
         ActiveKit = kit;
     }
+
+
+    // Methods.
+
+
+    /* Events. */
+    public void Load()
+    {
+        ActiveKit.Load(this);
+        Kit.MarkKitAsUsed(ActiveKit);
+    }
+
+    public void Unload()
+    {
+        ActiveKit.Unload(this);
+        Kit.UnMarkKitAsUsed(ActiveKit);
+    }
+
+    public void Tick()
+    {
+        ActiveKit.Tick(this);
+    }
 }

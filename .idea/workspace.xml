@@ -9,16 +9,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players.">
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandOption.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/LocationNode.java" afterDir="false" />
+    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMapCopyData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/CommandNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/PlayerSelectorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/PlayerSelectorNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,14 +121,22 @@
       <option name="project" value="LOCAL" />
       <updated>1703285962937</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fixed PlayerSelectorNode bugs, improved command error messages to be more specific. Added LocationNode which, while works, is weird in the way it works, may be changed in the future. Extended the manage command to allow to set, get and go to the server's spawn.">
+      <created>1703335622976</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1703335622976</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Did stuff" />
     <MESSAGE value="Did stuff (47 warning btw)" />
     <MESSAGE value="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players." />
+    <MESSAGE value="Fixed PlayerSelectorNode bugs, improved command error messages to be more specific. Added LocationNode which, while works, is weird in the way it works, may be changed in the future. Extended the manage command to allow to set, get and go to the server's spawn." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed PlayerSelectorNode bugs, improved command error messages to be more specific. Added LocationNode which, while works, is weird in the way it works, may be changed in the future. Extended the manage command to allow to set, get and go to the server's spawn." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
