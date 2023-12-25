@@ -41,6 +41,29 @@ public abstract class Game
         {
             throw new NullArgumentException("game is null.");
         }
+
+        if (!s_games.contains(game))
+        {
+            s_games.add(game);
+        }
+    }
+
+    public static void RemoveGame(Game game)
+    {
+        if (game == null)
+        {
+            throw new NullArgumentException("game is null.");
+        }
+
+        s_games.remove(game);
+    }
+
+    public static void TickGames()
+    {
+        for (Game ActiveGame : s_games)
+        {
+            ActiveGame.Tick();
+        }
     }
 
 
@@ -136,13 +159,33 @@ public abstract class Game
         SetPlayerStates(BSRPlayerState.InLobby);
     }
 
-    public void Tick()
+    public final void Tick()
     {
-        _gameTime++;
+        switch (_state)
+        {
+            case PreGame -> TickPreGame();
+            case InGame -> TickInGame();
+            case PostGame -> TickPostGame();
+        }
     }
 
 
     // Protected methods.
+    protected void TickPreGame()
+    {
+
+    }
+
+    protected void TickInGame()
+    {
+        _gameTime++;
+    }
+
+    protected void TickPostGame()
+    {
+
+    }
+
     protected void TeleportPlayersToMap()
     {
         if (_map == null)

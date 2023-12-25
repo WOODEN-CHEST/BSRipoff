@@ -1,5 +1,6 @@
 package sus.keiger.bsripoff;
 
+import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
@@ -9,6 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class ServerManager
@@ -87,6 +89,20 @@ public class ServerManager
     public void RemoveBSRipoffPlayer(BSRipoffPlayer bsrPlayer)
     {
         _bsrPlayers.remove(bsrPlayer.MCPlayer);
+    }
+
+    public Collection<BSRipoffPlayer> GetPlayers()
+    {
+        return _bsrPlayers.values();
+    }
+
+    /* Events. */
+    public void OnTickEvent(ServerTickStartEvent event)
+    {
+        for (BSRipoffPlayer BSRPlayer : _bsrPlayers.values())
+        {
+            BSRPlayer.OnTickEvent(event);
+        }
     }
 
     public void OnPlayerJoinEvent(PlayerJoinEvent event)

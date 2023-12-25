@@ -1,5 +1,6 @@
 package sus.keiger.bsripoff.game;
 
+import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.entity.Player;
 import sus.keiger.bsripoff.game.kit.KitInstance;
@@ -36,6 +37,7 @@ public class GamePlayer
 
 
     // Methods.
+    /* Getters and setters. */
     public GameState GetGameState()
     {
         return CurrentGame.GetState();
@@ -44,5 +46,15 @@ public class GamePlayer
     public KitInstance GetKitInstance()
     {
         return _kitInstance;
+    }
+
+
+    /* Events. */
+    public void OnTickEvent(ServerTickStartEvent event)
+    {
+        if (CurrentGame.GetState() == GameState.InGame)
+        {
+            _kitInstance.Tick();
+        }
     }
 }
