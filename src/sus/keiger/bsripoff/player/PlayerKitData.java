@@ -2,8 +2,8 @@ package sus.keiger.bsripoff.player;
 
 import org.apache.commons.lang.NullArgumentException;
 import sus.keiger.bsripoff.game.kit.Kit;
-import sus.keiger.bsripoff.game.kit.KitGadgetDefinition;
-import sus.keiger.bsripoff.game.kit.KitUpgradeDefinition;
+import sus.keiger.bsripoff.game.kit.upgrades.KitGadgetDefinition;
+import sus.keiger.bsripoff.game.kit.upgrades.KitUpgradeDefinition;
 
 import java.util.HashMap;
 
@@ -17,6 +17,7 @@ public class PlayerKitData
     private final HashMap<String, KitUpgradeLevel> _upgrades = new HashMap<>();
     private final HashMap<String, KitGadgetLevel> _gadgets = new HashMap<>();
     private final HashMap<String, KitStarPowerLevel> _starPowers = new HashMap<>();
+    private boolean _isKitUnlocked = false;
 
 
     // Constructors.
@@ -45,70 +46,40 @@ public class PlayerKitData
 
 
     // Methods.
-    public int GetUpgradeLevel(String upgradeName)
+    public KitUpgradeLevel GetUpgradeLevel(String upgradeName)
     {
         if (upgradeName == null)
         {
             throw new NullArgumentException("upgradeName is null");
         }
 
-        KitUpgradeLevel Level = _upgrades.get(upgradeName);
-        return Level != null ? Level.Equipped : KitUpgradeDefinition.MIN_LEVEL;
+        return _upgrades.get(upgradeName);
     }
 
-    public boolean IsGadgetEquipped(String gadgetName)
+    public KitGadgetLevel GetGadgetLevel(String gadgetName)
     {
         if (gadgetName == null)
         {
             throw new NullArgumentException("gadgetName is null");
         }
 
-        KitGadgetLevel Level = _gadgets.get(gadgetName);
-        return Level != null && Level.IsEquipped;
+        return _gadgets.get(gadgetName);
     }
 
-    public boolean IsStarPowerEquipped(String starPowerName)
+    public KitStarPowerLevel GetStarPowerLevel(String starPowerName)
     {
         if (starPowerName == null)
         {
             throw new NullArgumentException("starPowerName is null");
         }
 
-        KitStarPowerLevel Level = _starPowers.get(starPowerName);
-        return Level != null && Level.IsEquipped;
+        return _starPowers.get(starPowerName);
     }
 
-    public long TryPurchaseUpgrade(String upgradeName, long balance)
+    public boolean GetIsKitUnlocked() { return _isKitUnlocked; }
+
+    public void SetIsKitUnlocked(boolean value)
     {
-        if (upgradeName == null)
-        {
-            throw new NullArgumentException("upgradeName is null");
-        }
-
-        KitUpgradeDefinition UpgradeDefinition = GameKit.GetUpgrade(upgradeName);
-        if (UpgradeDefinition == null)
-        {
-            return 0L;
-        }
-
-        KitUpgradeLevel Level = _upgrades.get(upgradeName);
-        if (Level.Unlocked >= KitUpgradeDefinition.MAX_LEVEL)
-        {
-            return 0L;
-        }
-
-        int UpgradeCost = UpgradeDefinition.GetUpgradeCostCoins(Level.Unlocked + 1, GameKit.Classification);
-        if (balance < UpgradeCost)
-        {
-            return 0L;
-        }
-
-        Level.Unlocked++;
-        return UpgradeCost;
-    }
-
-    public void SetUpgradeLevel(String upgradeName, int level)
-    {
-
+        _isKitUnlocked = value;
     }
 }

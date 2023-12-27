@@ -5,5 +5,6 @@ public enum GameState
     Lobby,
     PreGame,
     InGame,
-    PostGame
+    PostGame,
+    Completed
 }

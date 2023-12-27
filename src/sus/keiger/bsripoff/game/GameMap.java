@@ -2,8 +2,8 @@ package sus.keiger.bsripoff.game;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.Location;
+import org.bukkit.WeatherType;
 import org.bukkit.util.Vector;
-import sus.keiger.bsripoff.BSRipoff;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +28,8 @@ public class GameMap
     private final ArrayList<Location> _blueTeamSpawns = new ArrayList<>();
     private final ArrayList<Location> _redTeamSpawns = new ArrayList<>();
     private final ArrayList<Location> _genericSpawns = new ArrayList<>();
+    private WeatherType _weather = WeatherType.CLEAR;
+    private long _time = 0L;
 
 
     // Constructors.
@@ -141,6 +143,25 @@ public class GameMap
     public void ClearRedSpawns()
     {
         _redTeamSpawns.clear();
+    }
+
+    public WeatherType GetWeather() { return _weather; }
+
+    public void SetWeatherType(WeatherType weather)
+    {
+        if (weather == null)
+        {
+            throw new NullArgumentException("Weather is null");
+        }
+
+        _weather = weather;
+    }
+
+    public long GetTime() { return _time; }
+
+    public void SetTime(long value)
+    {
+        _time = value;
     }
 
 

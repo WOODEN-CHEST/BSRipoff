@@ -8,6 +8,8 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import sus.keiger.bsripoff.game.Game;
+import sus.keiger.bsripoff.game.TestGame;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
 import java.util.Collection;
@@ -19,6 +21,8 @@ public class ServerManager
     public final World Overworld;
     public final World TheNether;
     public final World TheEnd;
+
+    public final Game TestingGame;
 
 
     // Private static fields.
@@ -33,6 +37,8 @@ public class ServerManager
         TheNether = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_nether"));
         TheEnd = BSRipoff.GetServer().getWorld(NamespacedKey.minecraft("the_end"));
         _lobbySpawnLocation = new Location(Overworld, 0d, 0d, 0d);
+
+        TestingGame = new TestGame(null);
     }
 
 
@@ -60,7 +66,7 @@ public class ServerManager
     }
 
     /* Players. */
-    public BSRipoffPlayer GetBSRipoffPlayer(Player mcPlayer)
+    public BSRipoffPlayer GetBSRPlayer(Player mcPlayer)
     {
         if (mcPlayer == null)
         {

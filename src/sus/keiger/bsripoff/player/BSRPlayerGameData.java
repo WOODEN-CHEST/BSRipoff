@@ -1,11 +1,7 @@
 package sus.keiger.bsripoff.player;
 
 import org.apache.commons.lang.NullArgumentException;
-import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.game.kit.Kit;
-import sus.keiger.bsripoff.game.kit.KitGadgetDefinition;
-import sus.keiger.bsripoff.game.kit.KitUpgradeDefinition;
-
 import java.util.HashMap;
 
 public class BSRPlayerGameData
@@ -56,6 +52,16 @@ public class BSRPlayerGameData
         return _kitData.get(kit);
     }
 
+    public PlayerKitData GetPlayerKitData(String kitName)
+    {
+        if (kitName == null)
+        {
+            throw new NullArgumentException("kitName is null");
+        }
+
+        return _kitData.get(Kit.GetRegisteredKitByName(kitName));
+    }
+
 
     /* Coins. */
     public long GetCoins() { return _coins; }
@@ -73,47 +79,5 @@ public class BSRPlayerGameData
     public void SetCoins(long amount)
     {
         _coins = Math.max(0L, amount);
-    }
-
-
-
-    public boolean TryPurchaseGadget(Kit kit, String gadgetName)
-    {
-        if (kit == null)
-        {
-            throw new NullArgumentException("kit is null");
-        }
-        if (gadgetName == null)
-        {
-            throw new NullArgumentException("gadgetName is null");
-        }
-
-        KitUpgradeDefinition GadgetDefinition = kit.GetUpgrade(gadgetName);
-        if (GadgetDefinition == null)
-        {
-            return false;
-        }
-
-        if (!_equippedGadgets.containsKey(gadgetName))
-        {
-            BSRipoff.GetLogger().warning("Kit gadget \"%s\" exists for a kit but not ".formatted(gadgetName) +
-                    "for a BSRPlayerGameData instance, this should be impossible.");
-            return false;
-        }
-
-        if (_equippedGadgets.get(gadgetName))
-        {
-            return false;
-        }
-
-        int UpgradeCost = UpgradeDefinition.GetUpgradeCostCoins(SelfLevel + 1, kit.Classification);
-        if (_coins < UpgradeCost)
-        {
-            return false;
-        }
-
-        RemoveCoins(UpgradeCost);
-        _kitUpgrades.put(upgradeName, SelfLevel + 1);
-        return true;
     }
 }

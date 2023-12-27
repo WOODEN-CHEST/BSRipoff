@@ -1,6 +1,8 @@
 package sus.keiger.bsripoff.game;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.bukkit.WeatherType;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.player.BSRPlayerState;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
@@ -12,7 +14,6 @@ public abstract class Game
 {
     // Protected fields.
     protected boolean IsJoiningDuringGameAllowed = false;
-    protected int MaxGameTime = BSRipoff.TICKS_IN_SECOND * 794; // 13 minutes and 14 seconds.
 
 
     // Private static fields.
@@ -23,8 +24,6 @@ public abstract class Game
     private final HashMap<BSRipoffPlayer, GamePlayer> _players = new HashMap<>();
     private GameState _state = GameState.Lobby;
     private GameMap _map;
-    private int _gameTime = 0;
-
 
 
     // Constructors.
@@ -87,6 +86,15 @@ public abstract class Game
         GamePlayer GPlayer = new GamePlayer(bsrPlayer, this);
         _players.put(bsrPlayer, GPlayer);
 
+        if (_state == GameState.PreGame)
+        {
+            OnPreStartEventPlayer(GPlayer);
+        }
+        else if (_state == GameState.InGame)
+        {
+            OnStartEventPlayer(GPlayer);
+        }
+
         return GPlayer;
     }
 
@@ -115,11 +123,6 @@ public abstract class Game
         return _state;
     }
 
-    public int GetGameTime()
-    {
-        return _gameTime;
-    }
-
     public GameMap GetMap()
     {
         return _map;
@@ -131,32 +134,64 @@ public abstract class Game
     }
 
     /* Game events. */
-    public void PreStart()
+    public final void PreStart()
     {
         if ((_state != GameState.Lobby) || (_players.size() == 0))
         {
             return;
         }
-
         _state = GameState.PreGame;
-        SetPlayerStates(BSRPlayerState.InGame);
 
-        TeleportPlayersToMap();
+        OnPreStartEvent();
+        for (GamePlayer GPlayer : _players.values())
+        {
+            OnPreStartEventPlayer(GPlayer);
+        }
     }
 
-    public void Start()
+    public final void Start()
     {
+        if (_state != GameState.PreGame)
+        {
+            return;
+        }
+        _state = GameState.InGame;
 
+        OnStartEvent();
+        for (GamePlayer GPlayer : _players.values())
+        {
+            OnStartEventPlayer(GPlayer);
+        }
     }
 
-    public void End()
+    public final void End()
     {
+        if (_state != GameState.InGame)
+        {
+            return;
+        }
+        _state = GameState.PostGame;
 
+        OnEndEvent();
+        for (GamePlayer GPlayer : _players.values())
+        {
+            OnEndEventPlayer(GPlayer);
+        }
     }
 
-    public void PostEnd()
+    public final void PostEnd()
     {
-        SetPlayerStates(BSRPlayerState.InLobby);
+        if (_state != GameState.PreGame)
+        {
+            return;
+        }
+        _state = GameState.Completed;
+
+        OnPostEndEvent();
+        for (GamePlayer GPlayer : _players.values())
+        {
+            OnPostEndEventPlayer(GPlayer);
+        }
     }
 
     public final void Tick()
@@ -169,41 +204,61 @@ public abstract class Game
         }
     }
 
+    public void OnPlayerDeathEvent(GamePlayer gamePlayer, PlayerDeathEvent event) { }
+
+    public  void OnPlayerRespawnEvent(GamePlayer player) { }
+
 
     // Protected methods.
-    protected void TickPreGame()
-    {
+    protected void TickPreGame() { }
+    protected void TickInGame() { }
 
+    protected void TickPostGame() { }
+
+    protected void OnPreStartEvent() { }
+
+    protected void OnPreStartEventPlayer(GamePlayer gPlayer)
+    {
+        gPlayer.BSRPlayer.SetState(BSRPlayerState.InGame);
+        gPlayer.MCPlayer.setInvulnerable(true);
     }
 
-    protected void TickInGame()
-    {
-        _gameTime++;
-    }
+    protected void OnStartEvent() { }
 
-    protected void TickPostGame()
+    protected void OnStartEventPlayer(GamePlayer gPlayer)
     {
-
-    }
-
-    protected void TeleportPlayersToMap()
-    {
-        if (_map == null)
+        if (_map != null)
         {
-            return;
+            gPlayer.MCPlayer.setPlayerWeather(_map.GetWeather());
+            gPlayer.MCPlayer.setPlayerTime(_map.GetTime(), false);
         }
 
-        for (BSRipoffPlayer BSRPlayer : _players.keySet())
-        {
-            BSRPlayer.MCPlayer.teleport(_map.GetSpawnLocation());
-        }
+        gPlayer.MCPlayer.setInvulnerable(false);
+        gPlayer.GetKitInstance().Load();
     }
 
-    protected void SetPlayerStates(BSRPlayerState state)
+    protected void OnEndEvent() { }
+
+    protected void OnEndEventPlayer(GamePlayer gPlayer)
     {
-        for (GamePlayer GPlayer : _players.values())
+        gPlayer.MCPlayer.setInvulnerable(true);
+        gPlayer.GetKitInstance().Unload();
+    }
+
+    protected void OnPostEndEvent() { }
+
+    protected void OnPostEndEventPlayer(GamePlayer gPlayer)
+    {
+        gPlayer.BSRPlayer.SetState(BSRPlayerState.InLobby);
+    }
+
+    protected void ForceSetState(GameState state)
+    {
+        if (state == null)
         {
-            GPlayer.BSRPlayer.SetState(state);
+            throw new NullArgumentException("state is null");
         }
+
+        _state = state;
     }
 }

@@ -5,6 +5,8 @@ import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 import sus.keiger.bsripoff.BSRipoff;
@@ -117,9 +119,27 @@ public class BSRipoffPlayer
 
     public void OnPlayerDropItemEvent(PlayerDropItemEvent event)
     {
-
+        if (_state == BSRPlayerState.InGame)
+        {
+            _gamePlayer.OnPlayerDropItemEvent(event);
+        }
     }
 
+    public void OnPlayerDamageEntityEvent(EntityDamageByEntityEvent event)
+    {
+        if (_state == BSRPlayerState.InGame)
+        {
+            _gamePlayer.OnPlayerDamageEntityEvent(event);
+        }
+    }
+
+    public void OnPlayerDeathEvent(PlayerDeathEvent event)
+    {
+        if (_state == BSRPlayerState.InGame)
+        {
+            _gamePlayer.OnPlayerDeathEvent(event);
+        }
+    }
 
     // Private methods.
     /* State. */

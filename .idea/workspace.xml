@@ -9,28 +9,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="I have no idea what I am doing.">
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitClass.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitGadgetDefinition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitStarPowerDefinition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitStats.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitUpgradeDefinition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRPlayerGameData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitGadgetLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitStarPowerLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitUpgradeLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/PlayerKitData.java" afterDir="false" />
+    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Tiny changes, nothing big, not at all.">
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TestGame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValueModifier.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValueOperator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitGadgetDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/upgrades/KitGadgetDefinition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitStarPowerDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/upgrades/KitStarPowerDefinition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitUpgradeDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/upgrades/KitUpgradeDefinition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRPlayerGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRPlayerGameData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitGadgetLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitGadgetLevel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitUpgradeLevel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitUpgradeLevel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/PlayerKitData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/PlayerKitData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +90,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="sus.keiger.bsripoff.game.kit" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="sus.keiger.bsripoff.player" />
       <recent name="sus.keiger.bsripoff.game.kit" />
@@ -151,7 +157,14 @@
       <option name="project" value="LOCAL" />
       <updated>1703433386626</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Tiny changes, nothing big, not at all.">
+      <created>1703541708499</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1703541708499</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -160,7 +173,8 @@
     <MESSAGE value="Created node system for commands. Made KeywordNode, ListNode, PlayerSelectorNode for a start, but more nodes are to come. PlayerSelectorNode is slightly buggy for now. More testing is needed. Added /manage command for admins, currently allows only to get and set the BSRPlayerState state of players." />
     <MESSAGE value="Fixed PlayerSelectorNode bugs, improved command error messages to be more specific. Added LocationNode which, while works, is weird in the way it works, may be changed in the future. Extended the manage command to allow to set, get and go to the server's spawn." />
     <MESSAGE value="I have no idea what I am doing." />
-    <option name="LAST_COMMIT_MESSAGE" value="I have no idea what I am doing." />
+    <MESSAGE value="Tiny changes, nothing big, not at all." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tiny changes, nothing big, not at all." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

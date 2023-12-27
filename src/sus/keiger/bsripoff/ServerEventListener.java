@@ -4,13 +4,14 @@ import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import sus.keiger.bsripoff.game.Game;
 import sus.keiger.bsripoff.game.kit.Kit;
-import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
 
 public class ServerEventListener implements Listener
@@ -31,7 +32,7 @@ public class ServerEventListener implements Listener
     @EventHandler
     public void OnPlayerDropItemEvent(PlayerDropItemEvent event)
     {
-
+        BSRipoff.GetServerManager().GetBSRPlayer(event.getPlayer()).OnPlayerDropItemEvent(event);
     }
 
     @EventHandler
@@ -40,6 +41,19 @@ public class ServerEventListener implements Listener
         if (!(event.getInventory().getHolder() instanceof Player))
         {
             return;
+        }
+    }
+
+    public void OnPlayerDeathEvent(PlayerDeathEvent event)
+    {
+        BSRipoff.GetServerManager().GetBSRPlayer(event.getPlayer()).OnPlayerDeathEvent(event);
+    }
+
+    public void OnEntityDamageByEntityEvent(EntityDamageByEntityEvent event)
+    {
+        if (event.getDamager() instanceof Player PlayerEntity)
+        {
+            BSRipoff.GetServerManager().GetBSRPlayer(PlayerEntity).OnPlayerDamageEntityEvent(event);
         }
     }
 

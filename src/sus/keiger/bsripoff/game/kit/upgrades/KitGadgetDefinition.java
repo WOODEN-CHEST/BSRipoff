@@ -1,6 +1,7 @@
-package sus.keiger.bsripoff.game.kit;
+package sus.keiger.bsripoff.game.kit.upgrades;
 
 import org.apache.commons.lang.NullArgumentException;
+import sus.keiger.bsripoff.game.kit.KitClass;
 
 public class KitGadgetDefinition
 {

@@ -1,19 +1,27 @@
 package sus.keiger.bsripoff.game.kit;
 
+import net.kyori.adventure.text.TextComponent;
 import org.apache.commons.lang.NullArgumentException;
-import org.bukkit.GameMode;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import sus.keiger.bsripoff.game.Game;
+import sus.keiger.bsripoff.game.GamePlayer;
+import sus.keiger.bsripoff.game.kit.upgrades.KitGadgetDefinition;
+import sus.keiger.bsripoff.game.kit.upgrades.KitStarPowerDefinition;
+import sus.keiger.bsripoff.game.kit.upgrades.KitUpgradeDefinition;
 
 import java.util.*;
-
+// Import EVERYTHING.
 
 public abstract class Kit
 {
     // Static fields.
+    public static final long KIT_COST = 1500L;
+
     /* Inventory slots. */
     /* https://www.spigotmc.org/wiki/raw-slot-ids/ */
     public static final int SLOT_RECIPE_RESULT = 0;
@@ -67,21 +75,6 @@ public abstract class Kit
 
     public static final int SLOT_OFFHAND = 45;
 
-
-    /* Attributes. */
-    public static final double MIN_MAX_HEALTH = 0d;
-    public static final double MAX_MAX_HEALTH = 1000d;
-    public static final double MIN_MOVEMENT_SPEED = 0d;
-    public static final double MAX_MOVEMENT_SPEED = 10d;
-    public static final double MIN_MELEE_ATTACK_DAMAGE = 0d;
-    public static final double MAX_MELEE_ATTACK_DAMAGE = 1_000_000d;
-    public static final double MIN_MELEE_ATTACK_SPEED =0d;
-    public static final double MAX_MELEE_ATTACK_SPEED = 1_000_000d;
-    public static final double MIN_ARMOR =0d;
-    public static final double MAX_ARMOR = 20d;
-    public static final double MIN_KNOCKBACK_RESISTANCE = 0d;
-    public static final double MAX_KNOCKBACK_RESISTANCE = 1d;
-
     /* Kits. */
     public static final Kit SWARD = new SwardKit();
 
@@ -91,10 +84,6 @@ public abstract class Kit
 
     /* Inventory. */
     public boolean IsInventoryDroppable = false;
-
-
-    /* Super. */
-    public int MaxSuperCharge = 100;
 
     /* Kit info. */
     public final ItemStack Icon;
@@ -110,12 +99,17 @@ public abstract class Kit
     // Private fields.
     /* Attributes. */
     private double _maxHealth = 20d;
-    private double _movementSpeed = 0.1d;
-    private double _meleeAttackDamage = 0d;
-    private double _meleeAttackSpeed = 4d;
+    private double _movementSpeed =0.1d;
+    private double _meleeAttackSpeed =4d;
     private double _armor = 0d;
     private double _knockBackResistance = 0d;
 
+    /* Super. */
+    private int _maxSuperCharge = 100;
+
+    /* Gadget. */
+    private int _gadgetUses = 3;
+    private int _gadgetRechargeTime = 300; // 15 seconds.
 
     /* Kit info. */
     private KitStats Stats;
@@ -219,7 +213,7 @@ public abstract class Kit
         return s_registeredKits.values();
     }
 
-    public static Kit GetKitByName(String name)
+    public static Kit GetRegisteredKitByName(String name)
     {
         if (name == null)
         {
@@ -230,61 +224,49 @@ public abstract class Kit
     }
 
 
+    /* Helper methods. */
+    public static void AddAllFlags(ItemStack item)
+    {
+        item.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
+                ItemFlag.HIDE_DYE, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
+                ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_ARMOR_TRIM);
+    }
+
+    public static void FormatEquipment(ItemStack item, boolean isUnbreakable, TextComponent name)
+    {
+        item.setUnbreakable(isUnbreakable);
+        item.editMeta(meta -> meta.displayName(name));
+        AddAllFlags(item);
+    }
+
+
     // Methods.
-    /* Events. */
+    public KitInstance CreateInstance(GamePlayer gPlayer, Game game)
+    {
+        return new KitInstance(gPlayer, game, this);
+    }
+
+    /* Events (called at specific times). */
     public void Load(KitInstance instance)
     {
-        SetAttributesOfPlayer(instance);
-
-        instance.MCPlayer.clearActivePotionEffects();
-
-        instance.MCPlayer.setExp(0f);
-        instance.MCPlayer.setLevel(0);
-
-        instance.MCPlayer.clearTitle();
-
-        instance.MCPlayer.setGameMode(GameMode.SURVIVAL);
-        instance.MCPlayer.setHealth(_maxHealth);
-
-        instance.MCPlayer.setVelocity(new Vector(0d, 0d, 0d));
-        instance.MCPlayer.setFallDistance(0f);
-
-        instance.MCPlayer.getInventory().clear();
         CreateInventory(instance.MCPlayer.getInventory());
     }
 
     public abstract void CreateInventory(Inventory inventory);
 
-    public void Tick(KitInstance instance)
-    {
-
-    }
+    public void Tick(KitInstance instance) { }
 
     public void StaticTick() { }
 
-    public void OnDeath(KitInstance instance)
-    {
-        instance.MCPlayer.setGameMode(GameMode.SPECTATOR);
-    }
+    public void OnPlayerDeathEvent(KitInstance instance, PlayerDeathEvent event) { }
 
-    public void OnRespawn(KitInstance instance)
-    {
-        instance.MCPlayer.setHealth(_maxHealth);
-        instance.MCPlayer.setGameMode(GameMode.SURVIVAL);
-    }
+    public void OnRespawn(KitInstance instance) { }
 
-    public void Unload(KitInstance instance)
-    {
+    public void OnPlayerDamageEntityEvent(KitInstance instance, EntityDamageEvent event) { }
 
-    }
+    public void Unload(KitInstance instance) { }
 
-    /* Inventory. */
-    public boolean GetIsInventoryDroppable()
-    {
-        return IsInventoryDroppable;
-    }
-
-    public void OnItemDropEvent(KitInstance instance, PlayerDropItemEvent event)
+    public void OnPlayerDropItemEvent(KitInstance instance, PlayerDropItemEvent event)
     {
         if (!IsInventoryDroppable)
         {
@@ -292,147 +274,129 @@ public abstract class Kit
         }
     }
 
-    public void SetIsInventoryDroppable(boolean value)
-    {
-        IsInventoryDroppable = value;
-    }
 
-    /* Getters and setters. */
+
+    /* Attributes. */
     public double GetMaxHealth() { return _maxHealth; }
 
-    public void SetMaxHealth(double value)
-    {
-        _maxHealth = Math.max(MIN_MAX_HEALTH, Math.max(value, MAX_MAX_HEALTH));
-    }
+    public void SetMaxHealth(double value) { _maxHealth = value; }
 
     public double GetMovementSpeedHealth() { return _movementSpeed; }
 
-    public void SetMovementSpeedHealth(double value)
-    {
-        _movementSpeed = Math.max(MIN_MOVEMENT_SPEED, Math.max(value, MAX_MOVEMENT_SPEED));
-    }
-
-    public double GetMeleeAttackDamage() { return _meleeAttackDamage; }
-
-    public void SetMeleeAttackDamage(double value)
-    {
-        _meleeAttackDamage = Math.max(MIN_MELEE_ATTACK_DAMAGE, Math.max(value, MAX_MELEE_ATTACK_DAMAGE));
-    }
+    public void SetMovementSpeed(double value) { _movementSpeed = value; }
 
     public double GetMeleeAttackSpeed() { return _meleeAttackSpeed; }
-
-    public void SetMeleeAttackSpeed(double value)
-    {
-        _meleeAttackSpeed = Math.max(MIN_MELEE_ATTACK_SPEED, Math.max(value, MAX_MELEE_ATTACK_SPEED));
-    }
+    public void SetMeleeAttackSpeed(double value) { _meleeAttackSpeed = value; }
 
     public double GetArmor() { return _armor; }
 
-    public void SetArmor(double value)
-    {
-        _armor = Math.max(MIN_ARMOR, Math.max(value, MAX_ARMOR));
-    }
+    public void SetArmor(double value) { _armor = value; }
 
     public double GetKnockbackResistance() { return _knockBackResistance; }
 
-    public void SetKnockbackResistance(double value)
+    public void SetKnockbackResistance(double value) { _knockBackResistance = value; }
+
+
+    /* Super. */
+    public int GetMaxSuperCharge() { return _maxSuperCharge; }
+
+    public void SetMaxSuperCharge(int value)
     {
-        _knockBackResistance = Math.max(MIN_KNOCKBACK_RESISTANCE, Math.max(value, MAX_KNOCKBACK_RESISTANCE));
+        _maxSuperCharge = Math.max(0, value);
+    }
+
+    public void ActivateSuper(KitInstance instance)
+    {
+
     }
 
 
+    /* Gadget. */
+    public int GetGadgetUses() { return _gadgetUses; }
+
+    public void SetGadgetUses(int value) { _gadgetUses = value; }
+
+    public int GetGadgetRechargeTime() { return _gadgetRechargeTime; }
+
+    public void SetGadgetRechargeTime(int value) { _gadgetRechargeTime = value; }
+
+    public void ActivateGadget(KitInstance instance) { }
+
+
     /* Upgrades. */
-    public void AddUpgrade(String internalName, KitUpgradeDefinition upgrade)
+    public void AddUpgrade(KitUpgradeDefinition upgrade)
     {
-        if (internalName == null)
-        {
-            throw new NullArgumentException("internalName is null");
-        }
         if (upgrade == null)
         {
             throw new NullArgumentException("upgrade is null");
         }
 
-        _upgrades.put(internalName, upgrade);
+        _upgrades.put(upgrade.Name, upgrade);
     }
 
     public Collection<KitUpgradeDefinition> GetUpgrades() { return _upgrades.values(); }
 
-    public KitUpgradeDefinition GetUpgrade(String internalName)
+    public KitUpgradeDefinition GetUpgrade(String name)
     {
-        if (internalName == null)
+        if (name == null)
         {
-            throw new NullArgumentException("internalName is null");
+            throw new NullArgumentException("name is null");
         }
 
-        return _upgrades.get(internalName);
+        return _upgrades.get(name);
     }
 
-    public void AddGadget(String internalName, KitGadgetDefinition gadget)
+    public void AddGadget(KitGadgetDefinition gadget)
     {
-        if (internalName == null)
-        {
-            throw new NullArgumentException("internalName is null");
-        }
         if (gadget == null)
         {
             throw new NullArgumentException("gadget is null");
         }
 
-        _gadgets.put(internalName, gadget);
+        _gadgets.put(gadget.Name, gadget);
     }
 
     public Collection<KitGadgetDefinition> GetGadgets() { return _gadgets.values(); }
 
-    public KitGadgetDefinition GetGadget(String internalName)
+    public KitGadgetDefinition GetGadget(String name)
     {
-        if (internalName == null)
+        if (name == null)
         {
-            throw new NullArgumentException("internalName is null");
+            throw new NullArgumentException("name is null");
         }
 
-        return _gadgets.get(internalName);
+        return _gadgets.get(name);
     }
 
-
-    public void AddStarPower(String internalName, KitStarPowerDefinition starPower)
+    public void AddStarPower(KitStarPowerDefinition starPower)
     {
-        if (internalName == null)
-        {
-            throw new NullArgumentException("internalName is null");
-        }
         if (starPower == null)
         {
             throw new NullArgumentException("starPower is null");
         }
 
-        _starPowers.put(internalName, starPower);
+        _starPowers.put(starPower.Name, starPower);
     }
 
     public Collection<KitStarPowerDefinition> GetStarPowers() { return _starPowers.values(); }
 
-    public KitStarPowerDefinition GetStarPower(String internalName)
+    public KitStarPowerDefinition GetStarPower(String name)
     {
-        if (internalName == null)
+        if (name == null)
         {
-            throw new NullArgumentException("internalName is null");
+            throw new NullArgumentException("name is null");
         }
 
-        return _starPowers.get(internalName);
+        return _starPowers.get(name);
     }
+
+    public long GetKitCost() { return (long)(KIT_COST * Classification.PriceMultiplier); }
+
+
 
 
     /* Helper methods. */
-    @SuppressWarnings("ConstantConditions")
-    public void SetAttributesOfPlayer(KitInstance instance)
-    {
-        instance.MCPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(_maxHealth);
-        instance.MCPlayer.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(_movementSpeed);
-        instance.MCPlayer.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(_meleeAttackDamage);
-        instance.MCPlayer.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(_meleeAttackSpeed);
-        instance.MCPlayer.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(_armor);
-        instance.MCPlayer.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(_knockBackResistance);
-    }
+
 
     // Private methods.
 }

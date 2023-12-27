@@ -85,7 +85,7 @@ public class ManageCommand
         {
             Player MCPlayer = Players.iterator().next();
             data.FeedbackString = "State of player %s is \"%s\"".formatted(
-                    MCPlayer.getName(), BSRipoff.GetServerManager().GetBSRipoffPlayer(MCPlayer).GetState().toString()
+                    MCPlayer.getName(), BSRipoff.GetServerManager().GetBSRPlayer(MCPlayer).GetState().toString()
             );
         }
     }
@@ -101,7 +101,7 @@ public class ManageCommand
 
         for (Player MCPlayer : Players)
         {
-            BSRipoff.GetServerManager().GetBSRipoffPlayer(MCPlayer).SetState(State);
+            BSRipoff.GetServerManager().GetBSRPlayer(MCPlayer).SetState(State);
         }
 
         if (Players.size() == 0)

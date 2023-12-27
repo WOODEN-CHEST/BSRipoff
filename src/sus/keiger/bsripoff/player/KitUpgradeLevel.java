@@ -1,14 +1,18 @@
 package sus.keiger.bsripoff.player;
 
 import org.apache.commons.lang.NullArgumentException;
-import sus.keiger.bsripoff.game.kit.KitUpgradeDefinition;
+import sus.keiger.bsripoff.game.kit.upgrades.KitUpgradeDefinition;
 
 public class KitUpgradeLevel
 {
+    // Fields.
+    public final KitUpgradeDefinition UpgradeDefinition;
+
+
     // Private fields.
     private int _equipped = 1;
     private int _unlocked = 1;
-    private KitUpgradeDefinition _definition;
+
 
 
     // Constructors.
@@ -19,14 +23,27 @@ public class KitUpgradeLevel
             throw new NullArgumentException("definition is null");
         }
 
-        _definition = definition;
+        UpgradeDefinition = definition;
     }
 
 
     // Methods.
     public int GetEquipped() { return _equipped; }
+
     public void SetEquipped(int level)
     {
-        _equipped = Math.max(KitUpgradeDefinition.MIN_LEVEL, Math.max(level, _definition.GetMaxLevel()));
+        _equipped = Math.max(KitUpgradeDefinition.MIN_LEVEL, Math.max(level, _unlocked));
+    }
+
+    public void ForceSetEquipped(int level)
+    {
+        _equipped = Math.max(KitUpgradeDefinition.MIN_LEVEL, Math.min(level, UpgradeDefinition.GetMaxLevel()));
+    }
+
+    public int GetUnlocked() { return _unlocked; }
+
+    public void SetUnlocked(int level)
+    {
+        _unlocked = Math.max(KitUpgradeDefinition.MIN_LEVEL, Math.min(level, UpgradeDefinition.GetMaxLevel()));
     }
 }
