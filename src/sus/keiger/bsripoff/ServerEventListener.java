@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import sus.keiger.bsripoff.game.Game;
@@ -44,17 +45,25 @@ public class ServerEventListener implements Listener
         }
     }
 
+    @EventHandler
     public void OnPlayerDeathEvent(PlayerDeathEvent event)
     {
         BSRipoff.GetServerManager().GetBSRPlayer(event.getPlayer()).OnPlayerDeathEvent(event);
     }
 
+    @EventHandler
     public void OnEntityDamageByEntityEvent(EntityDamageByEntityEvent event)
     {
         if (event.getDamager() instanceof Player PlayerEntity)
         {
             BSRipoff.GetServerManager().GetBSRPlayer(PlayerEntity).OnPlayerDamageEntityEvent(event);
         }
+    }
+
+    @EventHandler
+    public void OnPlayerInteractEvent(PlayerInteractEvent event)
+    {
+        BSRipoff.GetServerManager().GetBSRPlayer(event.getPlayer()).OnPlayerInteractEvent(event);
     }
 
     /* Server. */

@@ -1,9 +1,7 @@
 package sus.keiger.bsripoff.game;
 
 import org.apache.commons.lang.NullArgumentException;
-import org.bukkit.WeatherType;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.player.BSRPlayerState;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
@@ -68,7 +66,7 @@ public abstract class Game
 
     // Methods.
     /* Getters and setters. */
-    public GamePlayer CreatePlayer(BSRipoffPlayer bsrPlayer)
+    public GamePlayer AddPlayer(BSRipoffPlayer bsrPlayer)
     {
         if (bsrPlayer == null)
         {
@@ -233,16 +231,18 @@ public abstract class Game
             gPlayer.MCPlayer.setPlayerTime(_map.GetTime(), false);
         }
 
+        gPlayer.BSRPlayer.SetState(BSRPlayerState.InGame);
         gPlayer.MCPlayer.setInvulnerable(false);
-        gPlayer.GetKitInstance().Load();
+        gPlayer.CreateKitInstance();
+        gPlayer.GetKitInstance().OnLoadEvent();
     }
 
     protected void OnEndEvent() { }
-
     protected void OnEndEventPlayer(GamePlayer gPlayer)
     {
+        gPlayer.BSRPlayer.SetState(BSRPlayerState.InGame);
         gPlayer.MCPlayer.setInvulnerable(true);
-        gPlayer.GetKitInstance().Unload();
+        gPlayer.GetKitInstance().OnUnloadEvent();
     }
 
     protected void OnPostEndEvent() { }

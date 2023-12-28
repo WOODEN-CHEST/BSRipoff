@@ -41,10 +41,8 @@ public class TwoTeamGame extends Game
 
     // Inherited methods.
     @Override
-    public void Start()
+    protected void OnStartEvent()
     {
-        super.Start();
-
         TeleportTeamToSpawn(GetMap().GetBlueSpawnLocations(), _bluePlayers);
         TeleportTeamToSpawn(GetMap().GetRedSpawnLocations(), _redPlayers);
     }

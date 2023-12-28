@@ -12,7 +12,6 @@ public class KitModifiableValue
     private final List<KitModifiableValueModifier> _modifiers = new ArrayList<>();
 
 
-
     // Constructors.
     public KitModifiableValue(double baseValue)
     {

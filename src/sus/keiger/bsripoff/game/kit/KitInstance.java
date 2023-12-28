@@ -1,12 +1,11 @@
 package sus.keiger.bsripoff.game.kit;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.NullArgumentException;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,7 +13,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
+import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.game.Game;
 import sus.keiger.bsripoff.game.GamePlayer;
 import sus.keiger.bsripoff.game.kit.value.KitModifiableValue;
@@ -29,24 +30,35 @@ public class KitInstance
 
 
     // Private fields.
+    /* Super */
+    private final KitModifiableValue _maxSuperCharge;
     private int _superCharge;
     private final ItemStack _superItem = new ItemStack(Material.BOOK, 1);;
+    private final NamespacedKey _superDataNamespacedKey = new NamespacedKey(BSRipoff.NAMESPACE, "is_super");
+    private final ActionbarMessage _superNotChargedMessage = new ActionbarMessage(60,
+            Component.text("Super not charged!").color(NamedTextColor.RED));
 
+    /* Gadget. */
     private final ItemStack _gadgetItem = new ItemStack(Material.LIME_DYE, 1);
     private int _gadgetRechargeTimer = 0;
     private int _gadgetUsesLeft = 0;
+    private final NamespacedKey _gadgetDataNamespacedKey = new NamespacedKey(BSRipoff.NAMESPACE, "is_gadget");
+    private final ActionbarMessage _gadgetNotChargedMessage = new ActionbarMessage(60,
+            Component.text("Gadget not charged!").color(NamedTextColor.RED));
 
+    /* Respawning. */
     private int _immunityTicks;
     private int _respawnTimer;
 
+    /* Attributes */
     private final KitModifiableValue _maxHealth;
     private final KitModifiableValue _movementSpeed;
     private final KitModifiableValue _meleeAttackSpeed;
     private final KitModifiableValue _armor;
     private final KitModifiableValue _knockBackResistance;
     private final KitModifiableValue _damageScale = new KitModifiableValue(1);
-    private final KitModifiableValue _maxSuperCharge;
 
+    /* Game. */
     private final Game _game;
 
 
@@ -78,6 +90,11 @@ public class KitInstance
         _armor = new KitModifiableValue(kit.GetArmor());
         _knockBackResistance = new KitModifiableValue(kit.GetKnockbackResistance());
         _maxSuperCharge = new KitModifiableValue(kit.GetMaxSuperCharge());
+
+        _superItem.editMeta(meta -> meta.getPersistentDataContainer().set(
+                _superDataNamespacedKey, PersistentDataType.BOOLEAN, true));
+        _gadgetItem.editMeta(meta -> meta.getPersistentDataContainer().set(
+                _gadgetDataNamespacedKey, PersistentDataType.BOOLEAN, true));
     }
 
 
@@ -144,9 +161,7 @@ public class KitInstance
         {
             MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO,
                     SoundCategory.PLAYERS, 0.8f, 0.8f);
-            GPlayer.BSRPlayer.AddActionbarMessage(new ActionbarMessage(
-                    60, Component.text("Super not charged!").color(NamedTextColor.RED)
-            ));
+            GPlayer.BSRPlayer.ActionBarManager.AddMessage(_superNotChargedMessage);
         }
     }
 
@@ -185,9 +200,7 @@ public class KitInstance
         {
             MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO,
                     SoundCategory.PLAYERS, 0.8f, 0.8f);
-            GPlayer.BSRPlayer.AddActionbarMessage(new ActionbarMessage(
-                    60, Component.text("Gadget not charged!").color(NamedTextColor.RED)
-            ));
+            GPlayer.BSRPlayer.ActionBarManager.AddMessage(_gadgetNotChargedMessage);
         }
     }
 
@@ -221,6 +234,10 @@ public class KitInstance
 
     public Game GetGame() { return _game; }
 
+    public int GetRespawnTimer() { return _respawnTimer; }
+
+    public void SetRespawnTimer(int value) { _respawnTimer = value; }
+
 
     /* Helper methods. */
     @SuppressWarnings("ConstantConditions")
@@ -235,7 +252,7 @@ public class KitInstance
 
 
     /* Events. */
-    public void Load()
+    public void OnLoadEvent()
     {
         MCPlayer.clearActivePotionEffects();
         MCPlayer.setExp(0f);
@@ -249,22 +266,21 @@ public class KitInstance
         MCPlayer.setFallDistance(0f);
         MCPlayer.getInventory().clear();
 
-        ActiveKit.Load(this);
-        Kit.MarkKitAsUsed(ActiveKit);
-
         UpdateSuper();
         UpdateGadget();
-
         UpdateAttributes();
+
+        Kit.MarkKitAsUsed(ActiveKit);
+        ActiveKit.Load(this);
     }
 
-    public void Unload()
+    public void OnUnloadEvent()
     {
         ActiveKit.Unload(this);
         Kit.UnMarkKitAsUsed(ActiveKit);
     }
 
-    public void Tick()
+    public void OnTickEvent()
     {
         MCPlayer.setInvulnerable(_immunityTicks > 0);
 
@@ -281,6 +297,8 @@ public class KitInstance
         _knockBackResistance.Tick();
         UpdateAttributes();
 
+        MCPlayer.setFoodLevel(10);
+
         _gadgetRechargeTimer--;
         if (_gadgetRechargeTimer == 0)
         {
@@ -290,13 +308,7 @@ public class KitInstance
         ActiveKit.Tick(this);
     }
 
-    public void OnDeathEvent(PlayerDeathEvent event)
-    {
-        MCPlayer.setGameMode(GameMode.SPECTATOR);
-        _game.OnPlayerDeathEvent(GPlayer, event);
-    }
-
-    public void Respawn()
+    public void OnRespawnEvent()
     {
         _immunityTicks = 80; // 4 seconds.
         MCPlayer.setGameMode(GameMode.SURVIVAL);
@@ -317,16 +329,30 @@ public class KitInstance
 
     public void OnPlayerDeathEvent(PlayerDeathEvent event)
     {
+        _game.OnPlayerDeathEvent(GPlayer, event);
         ActiveKit.OnPlayerDeathEvent(this, event);
+
+        MCPlayer.setGameMode(GameMode.SPECTATOR);
+        if (MCPlayer.getLastDeathLocation() != null)
+        {
+            MCPlayer.teleport(MCPlayer.getLastDeathLocation());
+        }
     }
 
     public void OnPlayerInteractEvent(PlayerInteractEvent event)
     {
-        if (event.getItem() == _superItem)
+        ActiveKit.OnPlayerInteractEvent(event);
+
+        if ((event.getItem() == null) || !event.getAction().isRightClick())
+        {
+            return;
+        }
+
+        if (event.getItem().getPersistentDataContainer().has(_superDataNamespacedKey))
         {
             TryUseSuper();
         }
-        else if (event.getItem() == _gadgetItem)
+        else if (event.getItem().getPersistentDataContainer().has(_gadgetDataNamespacedKey))
         {
             TryUseGadget();
         }
@@ -346,13 +372,13 @@ public class KitInstance
         {
             _superItem.setType(Material.ENCHANTED_BOOK);
             _superItem.editMeta(meta -> meta.displayName(Component.text("Super")
-                    .color(NamedTextColor.GREEN)));
+                    .color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)));
         }
         else
         {
             _superItem.setType(Material.BOOK);
-            _superItem.editMeta(meta -> meta.displayName(Component.text("Super not charged")
-                    .color(NamedTextColor.DARK_GRAY)));
+            _superItem.editMeta(meta -> meta.displayName(Component.text("Super")
+                    .color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
         }
     }
 
@@ -368,13 +394,15 @@ public class KitInstance
         {
             _gadgetItem.setType(Material.LIME_DYE);
             _gadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget (%d left)"
-                            .formatted(_gadgetUsesLeft)).color(NamedTextColor.GREEN)));
+                            .formatted(_gadgetUsesLeft))
+                    .color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)));
         }
         else
         {
             _gadgetItem.setType(Material.GRAY_DYE);
-            _gadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget charging... (%d left)"
-                            .formatted(_gadgetUsesLeft)).color(NamedTextColor.DARK_GRAY)));
+            _gadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget (%d left)"
+                            .formatted(_gadgetUsesLeft))
+                    .color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
         }
     }
 }

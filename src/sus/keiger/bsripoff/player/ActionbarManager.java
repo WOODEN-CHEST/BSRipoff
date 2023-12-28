@@ -9,10 +9,15 @@ import java.util.ArrayList;
 
 public class ActionbarManager
 {
+    // Static fields.
+    public static final int MAX_MESSAGES = 10;
+
+
     // Private fields.
-    private ArrayList<ActionbarMessage> _actionbarMessages;
+    private final ArrayList<ActionbarMessage> _actionbarMessages = new ArrayList<>();
     private TextComponent _combinedActionbarMessage;
     private boolean _actionbarChanged = false;
+
 
 
     // Constructors.
@@ -57,14 +62,21 @@ public class ActionbarManager
         {
             throw new NullArgumentException("message is null");
         }
+        if (_actionbarMessages.size() >= MAX_MESSAGES)
+        {
+            return;
+        }
+        if (!_actionbarMessages.contains(message))
+        {
+            _actionbarMessages.add(message);
+        }
 
-        _actionbarMessages.add(message);
+        message.SetTimeExisted(0);
         _actionbarChanged = true;
     }
 
 
     // Private methods.
-
     private void BuildActionbarMessage()
     {
         TextComponent.Builder Builder = Component.text();
@@ -72,11 +84,11 @@ public class ActionbarManager
         boolean HadElement = false;
         for (ActionbarMessage Message : _actionbarMessages)
         {
-            Builder.append(Message.Contents);
             if (HadElement)
             {
                 Builder.append(Component.text(" | ").color(NamedTextColor.WHITE));
             }
+            Builder.append(Message.GetContents());
             HadElement = true;
         }
 

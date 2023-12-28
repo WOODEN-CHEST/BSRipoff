@@ -1,10 +1,13 @@
 package sus.keiger.bsripoff.command.manage;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.command.*;
+import sus.keiger.bsripoff.player.ActionbarMessage;
 import sus.keiger.bsripoff.player.BSRPlayerState;
 
 import java.util.HashSet;
@@ -20,6 +23,8 @@ public class ManageCommand
         // Add nodes.
         Command.AddSubNode(CreateStateNode());
         Command.AddSubNode(CreateSpawnNode());
+        Command.AddSubNode(CreateTestGameNode());
+        Command.AddSubNode(CreateActionbarNode());
 
         return Command;
     }
@@ -64,6 +69,33 @@ public class ManageCommand
 
         return SpawnNode;
     }
+
+    private static CommandNode CreateTestGameNode()
+    {
+        CommandNode TestGameNode = new KeywordNode("testgame", null);
+
+        CommandNode JoinNode = new KeywordNode("join", ManageCommand::JoinGame);
+        TestGameNode.AddSubNode(JoinNode);
+
+        CommandNode LeaveNode = new KeywordNode("leave", ManageCommand::LeaveGame);
+        TestGameNode.AddSubNode(LeaveNode);
+
+        return TestGameNode;
+    }
+
+    private static CommandNode CreateActionbarNode()
+    {
+        CommandNode ActionbarNode = new KeywordNode("actionbar", null);
+
+        CommandNode TimeNode = new NumberNode(null);
+        ActionbarNode.AddSubNode(TimeNode);
+
+        CommandNode StrNode = new TextNode(ManageCommand::AddActionbar);
+        TimeNode.AddSubNode(StrNode);
+
+        return ActionbarNode;
+    }
+
 
     /* Functionality. */
     @SuppressWarnings("unchecked")
@@ -147,5 +179,30 @@ public class ManageCommand
             EntitySender.teleport(BSRipoff.GetServerManager().GetSpawnLocation());
             data.FeedbackString = "Teleported to spawn";
         }
+    }
+
+    private static void JoinGame(CommandData data, List<Object> parsedData)
+    {
+        BSRipoff.GetServerManager().GetBSRPlayer((Player)data.Sender).GameData.JoinGame(
+                BSRipoff.GetServerManager().TestingGame);
+        data.FeedbackString = "Joined game";
+    }
+
+    private static void LeaveGame(CommandData data, List<Object> parsedData)
+    {
+        BSRipoff.GetServerManager().GetBSRPlayer((Player)data.Sender).GameData.LeaveAnyGame();
+        data.FeedbackString = "Left game";
+    }
+
+    private static void AddActionbar(CommandData data, List<Object> parsedData)
+    {
+        int Time = (int)((double)parsedData.get(0));
+        String Text = (String)parsedData.get(1);
+
+        BSRipoff.GetServerManager().GetBSRPlayer((Player)data.Sender).ActionBarManager.AddMessage(
+                new ActionbarMessage(Time, Component.text(Text).color(NamedTextColor.DARK_PURPLE))
+        );
+
+        data.FeedbackString = "Added actionbar with text \"%s\" and duration %d".formatted(Text, Time);
     }
 }

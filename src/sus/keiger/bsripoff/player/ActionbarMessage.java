@@ -7,11 +7,13 @@ public class ActionbarMessage
 {
     // Fields.
     public final int LifespanTicks;
-    public final TextComponent Contents;
 
 
     // Private fields.
     private int _timeExistedTicks = 0;
+    private int _id;
+    private TextComponent _contents;
+
 
     // Constructors.
     public ActionbarMessage(int lifespanTicks,TextComponent contents)
@@ -22,7 +24,7 @@ public class ActionbarMessage
         }
 
         LifespanTicks = lifespanTicks;
-        Contents = contents;
+        _contents = contents;
     }
 
 
@@ -31,5 +33,22 @@ public class ActionbarMessage
     {
         _timeExistedTicks++;
         return _timeExistedTicks > LifespanTicks;
+    }
+
+    public void SetContents(TextComponent contents)
+    {
+        if (contents == null)
+        {
+            throw new NullArgumentException("contents are null");
+        }
+
+        _contents = contents;
+    }
+
+    public TextComponent GetContents() { return _contents; }
+
+    public void SetTimeExisted(int value)
+    {
+        _timeExistedTicks = Math.max(0, value);
     }
 }

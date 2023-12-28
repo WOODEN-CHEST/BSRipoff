@@ -21,7 +21,7 @@ public class SwardKit extends Kit
     }
 
     @Override
-    public void CreateInventory(Inventory inventory)
+    public void CreateInventory(KitInstance instance, Inventory inventory)
     {
         ItemStack Helmet = new ItemStack(Material.IRON_HELMET, 1);
         FormatEquipment(Helmet, true, Component.text("Helmet"));
@@ -39,5 +39,6 @@ public class SwardKit extends Kit
         inventory.setItem(SLOT_ARMOR_LEGS, Leggings);
         inventory.setItem(SLOT_ARMOR_FEET, Boots);
         inventory.setItem(SLOT_HOTBAR1, Sword);
+        inventory.setItem(SLOT_HOTBAR2, instance.GetSuperItem());
     }
 }

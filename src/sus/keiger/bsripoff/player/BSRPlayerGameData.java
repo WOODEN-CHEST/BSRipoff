@@ -1,6 +1,9 @@
 package sus.keiger.bsripoff.player;
 
 import org.apache.commons.lang.NullArgumentException;
+import sus.keiger.bsripoff.BSRipoff;
+import sus.keiger.bsripoff.game.Game;
+import sus.keiger.bsripoff.game.GamePlayer;
 import sus.keiger.bsripoff.game.kit.Kit;
 import java.util.HashMap;
 
@@ -10,11 +13,19 @@ public class BSRPlayerGameData
     private long _coins;
     private Kit _selectedKit;
     private final HashMap<Kit, PlayerKitData> _kitData = new HashMap<>();
+    private final BSRipoffPlayer _bsrPlayer;
+    private GamePlayer _gamePlayer = null;
 
 
     // Constructors.
-    public BSRPlayerGameData()
+    public BSRPlayerGameData(BSRipoffPlayer bsrPlayer)
     {
+        if (bsrPlayer == null)
+        {
+            throw new NullArgumentException("bsrPlayer is null");
+        }
+        _bsrPlayer = bsrPlayer;
+
         for (Kit GameKit : Kit.GetRegisteredKits())
         {
             _kitData.put(GameKit, new PlayerKitData(GameKit));
@@ -60,6 +71,30 @@ public class BSRPlayerGameData
         }
 
         return _kitData.get(Kit.GetRegisteredKitByName(kitName));
+    }
+
+    /* Game. */
+    public GamePlayer GetGamePlayer() { return _gamePlayer; }
+
+    public void JoinGame(Game game)
+    {
+        if (game == null)
+        {
+            throw new NullArgumentException("game is null");
+        }
+
+        LeaveAnyGame();
+        _gamePlayer = game.AddPlayer(_bsrPlayer);
+    }
+
+    public void LeaveAnyGame()
+    {
+        if (_gamePlayer == null)
+        {
+            return;
+        }
+
+        _gamePlayer.CurrentGame.RemovePlayer(_bsrPlayer);
     }
 
 

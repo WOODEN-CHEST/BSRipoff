@@ -9,25 +9,19 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
+import org.bukkit.event.player.PlayerInteractEvent;
 import sus.keiger.bsripoff.BSRipoff;
-import sus.keiger.bsripoff.game.GamePlayer;
-import sus.keiger.bsripoff.game.kit.Kit;
 
 public class BSRipoffPlayer
 {
     // Fields.
     public final Player MCPlayer;
-    public final BSRPlayerGameData GameData = new BSRPlayerGameData();
+    public final BSRPlayerGameData GameData;
+    public final ActionbarManager ActionBarManager = new ActionbarManager();
 
 
     // Private fields.
     private BSRPlayerState _state;
-    private ActionbarManager _actionbarManager = new ActionbarManager();
-
-
-    /* Game. */
-    private GamePlayer _gamePlayer = null;
-    private Kit _selectedKit;
 
 
     // Constructors.
@@ -35,12 +29,12 @@ public class BSRipoffPlayer
     {
         if (mcPlayer == null)
         {
-            throw new IllegalArgumentException("MCPlayer is null");
+            throw new NullArgumentException("MCPlayer is null");
         }
 
         MCPlayer = mcPlayer;
+        GameData = new BSRPlayerGameData(this);
         SetState(BSRPlayerState.InLobby);
-        _selectedKit = Kit.SWARD;
     }
 
 
@@ -55,7 +49,7 @@ public class BSRipoffPlayer
     {
         if (state == null)
         {
-            throw new IllegalArgumentException("State may not be null.");
+            throw new NullArgumentException("State may not be null.");
         }
 
         _state = state;
@@ -75,44 +69,15 @@ public class BSRipoffPlayer
         }
     }
 
-    public GamePlayer GetGamePlayer()
-    {
-        return _gamePlayer;
-    }
-
-    public Kit GetSelectedKit()
-    {
-        return _selectedKit;
-    }
-
-    public void SetSelectedKit(Kit kit)
-    {
-        if (kit == null)
-        {
-            throw new NullArgumentException("Kit is null.");
-        }
-
-        _selectedKit = kit;
-    }
-
-
-    /* Actionbar. */
-    public void AddActionbarMessage(ActionbarMessage message)
-    {
-        _actionbarManager.AddMessage(message);
-    }
-
-
-    /* Helper methods. */
 
     /* Events. */
     public void OnTickEvent(ServerTickStartEvent event)
     {
-        _actionbarManager.Tick(this);
+        ActionBarManager.Tick(this);
 
         if (_state == BSRPlayerState.InGame)
         {
-            _gamePlayer.OnTickEvent(event);
+            GameData.GetGamePlayer().OnTickEvent(event);
             return;
         }
     }
@@ -121,7 +86,7 @@ public class BSRipoffPlayer
     {
         if (_state == BSRPlayerState.InGame)
         {
-            _gamePlayer.OnPlayerDropItemEvent(event);
+            GameData.GetGamePlayer().OnPlayerDropItemEvent(event);
         }
     }
 
@@ -129,7 +94,7 @@ public class BSRipoffPlayer
     {
         if (_state == BSRPlayerState.InGame)
         {
-            _gamePlayer.OnPlayerDamageEntityEvent(event);
+            GameData.GetGamePlayer().OnPlayerDamageEntityEvent(event);
         }
     }
 
@@ -137,9 +102,17 @@ public class BSRipoffPlayer
     {
         if (_state == BSRPlayerState.InGame)
         {
-            _gamePlayer.OnPlayerDeathEvent(event);
+            GameData.GetGamePlayer().OnPlayerDeathEvent(event);
         }
     }
+    public void OnPlayerInteractEvent(PlayerInteractEvent event)
+    {
+        if (_state == BSRPlayerState.InGame)
+        {
+            GameData.GetGamePlayer().OnPlayerInteractEvent(event);
+        }
+    }
+
 
     // Private methods.
     /* State. */
@@ -159,11 +132,10 @@ public class BSRipoffPlayer
         MCPlayer.clearActivePotionEffects();
         MCPlayer.clearTitle();
 
+        MCPlayer.getInventory().clear();
+
         MCPlayer.teleport(BSRipoff.GetServerManager().GetSpawnLocation());
     }
 
-    private void SetStateInGame()
-    {
-
-    }
+    private void SetStateInGame() { }
 }

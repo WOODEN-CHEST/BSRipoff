@@ -1,13 +1,16 @@
 package sus.keiger.bsripoff.game.kit;
 
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.game.Game;
 import sus.keiger.bsripoff.game.GamePlayer;
 import sus.keiger.bsripoff.game.kit.upgrades.KitGadgetDefinition;
@@ -22,18 +25,11 @@ public abstract class Kit
     // Static fields.
     public static final long KIT_COST = 1500L;
 
-    /* Inventory slots. */
-    /* https://www.spigotmc.org/wiki/raw-slot-ids/ */
-    public static final int SLOT_RECIPE_RESULT = 0;
-    public static final int SLOT_RECIPE_TOP_LEFT = 1;
-    public static final int SLOT_RECIPE_TOP_RIGHT = 2;
-    public static final int SLOT_RECIPE_BOTTOM_LEFT = 3;
-    public static final int SLOT_RECIPE_BOTTOM_RIGHT = 4;
-
-    public static final int SLOT_ARMOR_HEAD = 5;
-    public static final int SLOT_ARMOR_CHEST = 6;
-    public static final int SLOT_ARMOR_LEGS = 7;
-    public static final int SLOT_ARMOR_FEET = 8;
+    /* Inventory slots, figured out through trial and error because online sources are wrong. */
+    public static final int SLOT_ARMOR_HEAD = 39;
+    public static final int SLOT_ARMOR_CHEST = 38;
+    public static final int SLOT_ARMOR_LEGS = 37;
+    public static final int SLOT_ARMOR_FEET = 36;
 
     public static final int SLOT_ROW1_COLUMN1 = 9;
     public static final int SLOT_ROW1_COLUMN2 = 10;
@@ -63,17 +59,17 @@ public abstract class Kit
     public static final int SLOT_ROW3_COLUMN8 = 34;
     public static final int SLOT_ROW3_COLUMN9 = 35;
 
-    public static final int SLOT_HOTBAR1 = 36;
-    public static final int SLOT_HOTBAR2 = 37;
-    public static final int SLOT_HOTBAR3 = 38;
-    public static final int SLOT_HOTBAR4 = 39;
-    public static final int SLOT_HOTBAR5 = 40;
-    public static final int SLOT_HOTBAR6 = 41;
-    public static final int SLOT_HOTBAR7 = 42;
-    public static final int SLOT_HOTBAR8 = 43;
-    public static final int SLOT_HOTBAR9 = 44;
+    public static final int SLOT_HOTBAR1 = 0;
+    public static final int SLOT_HOTBAR2 = 1;
+    public static final int SLOT_HOTBAR3 = 2;
+    public static final int SLOT_HOTBAR4 = 3;
+    public static final int SLOT_HOTBAR5 = 4;
+    public static final int SLOT_HOTBAR6 = 5;
+    public static final int SLOT_HOTBAR7 = 6;
+    public static final int SLOT_HOTBAR8 = 7;
+    public static final int SLOT_HOTBAR9 = 8;
 
-    public static final int SLOT_OFFHAND = 45;
+    public static final int SLOT_OFFHAND = 40;
 
     /* Kits. */
     public static final Kit SWARD = new SwardKit();
@@ -235,7 +231,7 @@ public abstract class Kit
     public static void FormatEquipment(ItemStack item, boolean isUnbreakable, TextComponent name)
     {
         item.setUnbreakable(isUnbreakable);
-        item.editMeta(meta -> meta.displayName(name));
+        item.editMeta(meta -> meta.displayName(name.decoration(TextDecoration.ITALIC, false)));
         AddAllFlags(item);
     }
 
@@ -249,10 +245,10 @@ public abstract class Kit
     /* Events (called at specific times). */
     public void Load(KitInstance instance)
     {
-        CreateInventory(instance.MCPlayer.getInventory());
+        CreateInventory(instance, instance.MCPlayer.getInventory());
     }
 
-    public abstract void CreateInventory(Inventory inventory);
+    public abstract void CreateInventory(KitInstance instance, Inventory inventory);
 
     public void Tick(KitInstance instance) { }
 
@@ -273,6 +269,8 @@ public abstract class Kit
             event.setCancelled(true);
         }
     }
+
+    public void OnPlayerInteractEvent(PlayerInteractEvent event) { }
 
 
 
@@ -391,12 +389,4 @@ public abstract class Kit
     }
 
     public long GetKitCost() { return (long)(KIT_COST * Classification.PriceMultiplier); }
-
-
-
-
-    /* Helper methods. */
-
-
-    // Private methods.
 }

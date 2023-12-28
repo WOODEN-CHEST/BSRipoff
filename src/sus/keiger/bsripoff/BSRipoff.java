@@ -1,5 +1,6 @@
 package sus.keiger.bsripoff;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import sus.keiger.bsripoff.command.manage.ManageCommand;
@@ -11,6 +12,7 @@ public class BSRipoff extends JavaPlugin
 {
     // Static fields.
     public static final int TICKS_IN_SECOND = 20;
+    public static final String NAMESPACE = "bsr";
 
 
     // Fields.

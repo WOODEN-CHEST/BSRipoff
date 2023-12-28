@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import sus.keiger.bsripoff.game.kit.KitInstance;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
@@ -61,13 +62,21 @@ public class GamePlayer
         _kitInstance = instance;
     }
 
+    public void CreateKitInstance()
+    {
+        if (_kitInstance == null)
+        {
+            _kitInstance = BSRPlayer.GameData.GetSelectedKit().CreateInstance(this, CurrentGame);
+        }
+    }
+
 
     /* Events. */
     public void OnTickEvent(ServerTickStartEvent event)
     {
         if (CurrentGame.GetState() == GameState.InGame)
         {
-            _kitInstance.Tick();
+            _kitInstance.OnTickEvent();
         }
     }
 
@@ -92,6 +101,14 @@ public class GamePlayer
         if (CurrentGame.GetState() == GameState.InGame)
         {
             _kitInstance.OnPlayerDeathEvent(event);
+        }
+    }
+
+    public void OnPlayerInteractEvent(PlayerInteractEvent event)
+    {
+        if (CurrentGame.GetState() == GameState.InGame)
+        {
+            _kitInstance.OnPlayerInteractEvent(event);
         }
     }
 }
