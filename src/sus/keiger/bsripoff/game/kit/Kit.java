@@ -3,6 +3,7 @@ package sus.keiger.bsripoff.game.kit;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.NullArgumentException;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -10,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.game.Game;
 import sus.keiger.bsripoff.game.GamePlayer;
 import sus.keiger.bsripoff.game.kit.upgrades.KitGadgetDefinition;
@@ -96,7 +96,7 @@ public abstract class Kit
     /* Attributes. */
     private double _maxHealth = 20d;
     private double _movementSpeed =0.1d;
-    private double _meleeAttackSpeed =4d;
+    private double _meleeAttackSpeed = 0d;
     private double _armor = 0d;
     private double _knockBackResistance = 0d;
 
@@ -153,7 +153,7 @@ public abstract class Kit
     {
         for (Kit DefinedKit : s_activeKits.keySet())
         {
-            DefinedKit.StaticTick();
+            DefinedKit.OnStaticTickEvent();
         }
     }
 
@@ -220,22 +220,6 @@ public abstract class Kit
     }
 
 
-    /* Helper methods. */
-    public static void AddAllFlags(ItemStack item)
-    {
-        item.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
-                ItemFlag.HIDE_DYE, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
-                ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_ARMOR_TRIM);
-    }
-
-    public static void FormatEquipment(ItemStack item, boolean isUnbreakable, TextComponent name)
-    {
-        item.setUnbreakable(isUnbreakable);
-        item.editMeta(meta -> meta.displayName(name.decoration(TextDecoration.ITALIC, false)));
-        AddAllFlags(item);
-    }
-
-
     // Methods.
     public KitInstance CreateInstance(GamePlayer gPlayer, Game game)
     {
@@ -243,24 +227,23 @@ public abstract class Kit
     }
 
     /* Events (called at specific times). */
-    public void Load(KitInstance instance)
+    public void OnLoadEvent(KitInstance instance)
     {
+        instance.MCPlayer.getInventory().clear();
         CreateInventory(instance, instance.MCPlayer.getInventory());
     }
 
-    public abstract void CreateInventory(KitInstance instance, Inventory inventory);
+    public void OnTickEvent(KitInstance instance) { }
 
-    public void Tick(KitInstance instance) { }
-
-    public void StaticTick() { }
+    public void OnStaticTickEvent() { }
 
     public void OnPlayerDeathEvent(KitInstance instance, PlayerDeathEvent event) { }
 
-    public void OnRespawn(KitInstance instance) { }
+    public void OnRespawnEvent(KitInstance instance) { }
 
-    public void OnPlayerDamageEntityEvent(KitInstance instance, EntityDamageEvent event) { }
+    public void OnPlayerDamageEntityEvent(KitInstance instance, EntityDamageByEntityEvent event) { }
 
-    public void Unload(KitInstance instance) { }
+    public void OnUnloadEvent(KitInstance instance) { }
 
     public void OnPlayerDropItemEvent(KitInstance instance, PlayerDropItemEvent event)
     {
@@ -270,8 +253,27 @@ public abstract class Kit
         }
     }
 
-    public void OnPlayerInteractEvent(PlayerInteractEvent event) { }
+    public void OnPlayerInteractEvent(KitInstance instance, PlayerInteractEvent event) { }
 
+    public void OnPlayerTakeDamageEvent(KitInstance instance, EntityDamageEvent event) { }
+
+
+    /* Inventory. */
+    public abstract void CreateInventory(KitInstance instance, Inventory inventory);
+
+    public void AddAllFlags(ItemStack item)
+    {
+        item.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
+                ItemFlag.HIDE_DYE, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
+                ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_ARMOR_TRIM);
+    }
+
+    public void FormatEquipment(ItemStack item, boolean isUnbreakable, TextComponent name)
+    {
+        item.setUnbreakable(isUnbreakable);
+        item.editMeta(meta -> meta.displayName(name.decoration(TextDecoration.ITALIC, false)));
+        AddAllFlags(item);
+    }
 
 
     /* Attributes. */
@@ -284,6 +286,7 @@ public abstract class Kit
     public void SetMovementSpeed(double value) { _movementSpeed = value; }
 
     public double GetMeleeAttackSpeed() { return _meleeAttackSpeed; }
+
     public void SetMeleeAttackSpeed(double value) { _meleeAttackSpeed = value; }
 
     public double GetArmor() { return _armor; }
@@ -303,10 +306,7 @@ public abstract class Kit
         _maxSuperCharge = Math.max(0, value);
     }
 
-    public void ActivateSuper(KitInstance instance)
-    {
-
-    }
+    public void ActivateSuper(KitInstance instance) { }
 
 
     /* Gadget. */

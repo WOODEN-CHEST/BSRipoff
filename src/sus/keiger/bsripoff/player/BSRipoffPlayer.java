@@ -3,9 +3,12 @@ package sus.keiger.bsripoff.player;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
@@ -69,6 +72,13 @@ public class BSRipoffPlayer
         }
     }
 
+    /* Sound. */
+    public void PlayErrorSound()
+    {
+        MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO,
+                SoundCategory.PLAYERS, 0.8f, 0.8f);
+    }
+
 
     /* Events. */
     public void OnTickEvent(ServerTickStartEvent event)
@@ -110,6 +120,14 @@ public class BSRipoffPlayer
         if (_state == BSRPlayerState.InGame)
         {
             GameData.GetGamePlayer().OnPlayerInteractEvent(event);
+        }
+    }
+
+    public void OnPlayerTakeDamageEvent(EntityDamageEvent event)
+    {
+        if (_state == BSRPlayerState.InGame)
+        {
+            GameData.GetGamePlayer().OnPlayerTakeDamageEvent(event);
         }
     }
 

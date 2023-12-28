@@ -14,7 +14,7 @@ public class KitModifiableValueModifier
 
 
     // Constructors.
-    public KitModifiableValueModifier(KitModifiableValueOperator operator, double value, int liftime)
+    public KitModifiableValueModifier(KitModifiableValueOperator operator, double value, int lifetime)
     {
         if (operator == null)
         {
@@ -23,7 +23,7 @@ public class KitModifiableValueModifier
 
         Operator = operator;
         Value = value;
-        _ticksLeft = liftime;
+        _ticksLeft = lifetime;
     }
 
 

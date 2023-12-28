@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -109,6 +110,14 @@ public class GamePlayer
         if (CurrentGame.GetState() == GameState.InGame)
         {
             _kitInstance.OnPlayerInteractEvent(event);
+        }
+    }
+
+    public void OnPlayerTakeDamageEvent(EntityDamageEvent event)
+    {
+        if (CurrentGame.GetState() == GameState.InGame)
+        {
+            _kitInstance.OnPlayerTakeDamageEvent(event);
         }
     }
 }

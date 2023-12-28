@@ -9,23 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Minor changes.">
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/NumberNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/TextNode.java" afterDir="false" />
+    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Got something working.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/command/manage/ManageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRPlayerGameData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRPlayerGameData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValueModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValueModifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -164,7 +155,14 @@
       <option name="project" value="LOCAL" />
       <updated>1703688805967</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Got something working.">
+      <created>1703771236873</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1703771236873</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -175,7 +173,8 @@
     <MESSAGE value="I have no idea what I am doing." />
     <MESSAGE value="Tiny changes, nothing big, not at all." />
     <MESSAGE value="Minor changes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor changes." />
+    <MESSAGE value="Got something working." />
+    <option name="LAST_COMMIT_MESSAGE" value="Got something working." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

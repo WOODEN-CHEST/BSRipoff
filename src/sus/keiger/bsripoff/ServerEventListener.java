@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -64,6 +65,15 @@ public class ServerEventListener implements Listener
     public void OnPlayerInteractEvent(PlayerInteractEvent event)
     {
         BSRipoff.GetServerManager().GetBSRPlayer(event.getPlayer()).OnPlayerInteractEvent(event);
+    }
+
+    @EventHandler
+    public void OnEntityDamageEvent(EntityDamageEvent event)
+    {
+        if (event.getEntity() instanceof Player PlayerEntity)
+        {
+            BSRipoff.GetServerManager().GetBSRPlayer(PlayerEntity).OnPlayerTakeDamageEvent(event);
+        }
     }
 
     /* Server. */

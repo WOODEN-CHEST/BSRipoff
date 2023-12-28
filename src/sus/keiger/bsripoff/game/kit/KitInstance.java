@@ -1,7 +1,6 @@
 package sus.keiger.bsripoff.game.kit;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.NullArgumentException;
@@ -9,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -16,8 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import sus.keiger.bsripoff.BSRipoff;
-import sus.keiger.bsripoff.game.Game;
-import sus.keiger.bsripoff.game.GamePlayer;
+import sus.keiger.bsripoff.game.*;
 import sus.keiger.bsripoff.game.kit.value.KitModifiableValue;
 import sus.keiger.bsripoff.player.ActionbarMessage;
 
@@ -32,23 +31,35 @@ public class KitInstance
     // Private fields.
     /* Super */
     private final KitModifiableValue _maxSuperCharge;
-    private int _superCharge;
-    private final ItemStack _superItem = new ItemStack(Material.BOOK, 1);;
+    private int _superCharge = 0;
+    private int _previousSuperCharge = 0;
     private final NamespacedKey _superDataNamespacedKey = new NamespacedKey(BSRipoff.NAMESPACE, "is_super");
-    private final ActionbarMessage _superNotChargedMessage = new ActionbarMessage(60,
+    private final ActionbarMessage _superNotChargedMessage = new ActionbarMessage(40,
             Component.text("Super not charged!").color(NamedTextColor.RED));
+    private final ActionbarMessage _superChargedMessage = new ActionbarMessage(40,
+            Component.text("Super charged!").color(NamedTextColor.GREEN));
+    private final ActionbarMessage _superActivatedMessage = new ActionbarMessage(40,
+            Component.text("Super activated!").color(NamedTextColor.GREEN));
 
     /* Gadget. */
-    private final ItemStack _gadgetItem = new ItemStack(Material.LIME_DYE, 1);
     private int _gadgetRechargeTimer = 0;
     private int _gadgetUsesLeft = 0;
     private final NamespacedKey _gadgetDataNamespacedKey = new NamespacedKey(BSRipoff.NAMESPACE, "is_gadget");
-    private final ActionbarMessage _gadgetNotChargedMessage = new ActionbarMessage(60,
+    private final ActionbarMessage _gadgetNotChargedMessage = new ActionbarMessage(40,
             Component.text("Gadget not charged!").color(NamedTextColor.RED));
+    private final ActionbarMessage _gadgetActivatedMessage = new ActionbarMessage(40,
+            Component.text("Gadget activated!").color(NamedTextColor.GREEN));
 
     /* Respawning. */
     private int _immunityTicks;
     private int _respawnTimer;
+
+    /* Healing. */
+    private int _healTimer = 0;
+    private final KitModifiableValue _repeatedHealTimerLimit = new KitModifiableValue(25);
+    private final KitModifiableValue _initialHealTimerLimit = new KitModifiableValue(100);
+    private final KitModifiableValue _healAmount = new KitModifiableValue(0.15);
+
 
     /* Attributes */
     private final KitModifiableValue _maxHealth;
@@ -90,11 +101,6 @@ public class KitInstance
         _armor = new KitModifiableValue(kit.GetArmor());
         _knockBackResistance = new KitModifiableValue(kit.GetKnockbackResistance());
         _maxSuperCharge = new KitModifiableValue(kit.GetMaxSuperCharge());
-
-        _superItem.editMeta(meta -> meta.getPersistentDataContainer().set(
-                _superDataNamespacedKey, PersistentDataType.BOOLEAN, true));
-        _gadgetItem.editMeta(meta -> meta.getPersistentDataContainer().set(
-                _gadgetDataNamespacedKey, PersistentDataType.BOOLEAN, true));
     }
 
 
@@ -112,9 +118,8 @@ public class KitInstance
 
     public void ChargeSuper(int amount)
     {
+        _previousSuperCharge = _superCharge;
         _superCharge = Math.max(0, Math.min(_superCharge + amount, ActiveKit.GetMaxSuperCharge()));
-        MCPlayer.setLevel(_superCharge);
-        MCPlayer.setExp(GetSuperChargeProgress());
         UpdateSuper();
     }
 
@@ -135,32 +140,37 @@ public class KitInstance
 
     public void SetSuperCharge(int level)
     {
+        _previousSuperCharge = _superCharge;
         _superCharge = Math.max(0, Math.min(level, ActiveKit.GetMaxSuperCharge()));
         UpdateSuper();
     }
 
     public void SetSuperCharge(float progress)
     {
+        _previousSuperCharge = _superCharge;
         _superCharge = Math.max(0,
                 Math.min((int)(progress * ActiveKit.GetMaxSuperCharge()), ActiveKit.GetMaxSuperCharge()));
         UpdateSuper();
     }
 
-    public ItemStack GetSuperItem() { return _superItem; }
+    public void SetSuperItem(int slot)
+    {
+        ItemStack Item = new ItemStack(Material.BOOK, 1);
+        Item.editMeta(meta -> meta.getPersistentDataContainer().set(
+            _superDataNamespacedKey, PersistentDataType.BOOLEAN, true));
+
+        MCPlayer.getInventory().setItem(slot, Item);
+    }
 
     public void TryUseSuper()
     {
         if (IsSuperCharged())
         {
-            MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE,
-                    SoundCategory.PLAYERS, 1f, 1f);
-            ActiveKit.ActivateSuper(this);
-            SetSuperCharge(0);
+            ActivateSuper();
         }
         else
         {
-            MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO,
-                    SoundCategory.PLAYERS, 0.8f, 0.8f);
+            GPlayer.BSRPlayer.PlayErrorSound();
             GPlayer.BSRPlayer.ActionBarManager.AddMessage(_superNotChargedMessage);
         }
     }
@@ -171,19 +181,19 @@ public class KitInstance
     public void SetGadgetUsesLeft(int value)
     {
         _gadgetUsesLeft = value;
-        UpdateGadget();
+        UpdateGadgetItem();
     }
 
     public void SetGadgetRechargeTimeLeft(int value)
     {
         _gadgetRechargeTimer = value;
-        UpdateGadget();
+        UpdateGadgetItem();
     }
 
     public void RechargeGadget()
     {
         _gadgetRechargeTimer = 0;
-        UpdateGadget();
+        UpdateGadgetItem();
     }
 
     public boolean IsGadgetCharged() { return (_gadgetRechargeTimer <= 0) && (_gadgetUsesLeft > 0); }
@@ -192,35 +202,30 @@ public class KitInstance
     {
         if (IsGadgetCharged())
         {
-            MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN,
-                    SoundCategory.PLAYERS, 1f, 2f);
-            ActiveKit.ActivateGadget(this);
+
+            ActivateGadget();
         }
         else
         {
-            MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO,
-                    SoundCategory.PLAYERS, 0.8f, 0.8f);
+            GPlayer.BSRPlayer.PlayErrorSound();
             GPlayer.BSRPlayer.ActionBarManager.AddMessage(_gadgetNotChargedMessage);
         }
     }
 
-    public ItemStack GetGadgetItem() { return _gadgetItem; }
-
-
-    /* Getters and setters. */
-    public int GetImmunityTicks()
+    public void SetGadgetItem(int slot)
     {
-        return _immunityTicks;
+        ItemStack Item = new ItemStack(Material.BOOK, 1);
+        Item.editMeta(meta -> meta.getPersistentDataContainer().set(
+                _gadgetDataNamespacedKey, PersistentDataType.BOOLEAN, true));
+
+        MCPlayer.getInventory().setItem(slot, Item);
     }
 
-    public void SetImmunityTicks(int value)
-    {
-        _immunityTicks = Math.max(0, value);
-    }
 
+    /* Attributes. */
     public KitModifiableValue GetMaxHealth() { return _maxHealth; }
 
-    public KitModifiableValue GetMovementSpeedHealth() { return _movementSpeed; }
+    public KitModifiableValue GetMovementSpeed() { return _movementSpeed; }
 
     public KitModifiableValue GetMeleeAttackDamage() { return _damageScale; }
 
@@ -232,11 +237,58 @@ public class KitInstance
 
     public KitModifiableValue GetDamageScale() { return _damageScale; }
 
+
+    /* Game. */
     public Game GetGame() { return _game; }
 
+
+    /* Respawning. */
     public int GetRespawnTimer() { return _respawnTimer; }
 
     public void SetRespawnTimer(int value) { _respawnTimer = value; }
+
+    public int GetImmunityTicks() { return _immunityTicks; }
+
+    public void SetImmunityTicks(int value) { _immunityTicks = Math.max(0, value); }
+
+
+    /* Health. */
+    public void SetHealthTimer(int value) { _healTimer = value; }
+
+    public int GetHealthTimer() { return _healTimer; }
+
+    public KitModifiableValue GetInitialHealthTimerLimit() { return _initialHealTimerLimit; }
+    public KitModifiableValue GetRepeatedHealthTimerLimit() { return _repeatedHealTimerLimit; }
+
+    public KitModifiableValue GetHealAmount() { return _healAmount; }
+
+
+    /* Inventory */
+    public ItemStack GetItemByMaterial(Material material)
+    {
+        for (ItemStack Item : MCPlayer.getInventory())
+        {
+            if ((Item != null) && (Item.getType() == material))
+            {
+                return Item;
+            }
+        }
+
+        return null;
+    }
+
+    public ItemStack GetItemByPersistentData(NamespacedKey key)
+    {
+        for (ItemStack Item : MCPlayer.getInventory())
+        {
+            if ((Item != null) && Item.getPersistentDataContainer().has(key))
+            {
+                return Item;
+            }
+        }
+
+        return null;
+    }
 
 
     /* Helper methods. */
@@ -250,13 +302,20 @@ public class KitInstance
         MCPlayer.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(_knockBackResistance.GetValue());
     }
 
+    public boolean IsEligibleForCritical()
+    {
+        return (MCPlayer.getFallDistance() > 0f) && !MCPlayer.isSprinting()
+                && (MCPlayer.getAttackCooldown() >= 0.9f);
+    }
+
 
     /* Events. */
     public void OnLoadEvent()
     {
+        ActiveKit.OnLoadEvent(this);
+        Kit.MarkKitAsUsed(ActiveKit);
+
         MCPlayer.clearActivePotionEffects();
-        MCPlayer.setExp(0f);
-        MCPlayer.setLevel(0);
         MCPlayer.clearTitle();
         MCPlayer.setGameMode(GameMode.SURVIVAL);
         MCPlayer.setHealth(_maxHealth.GetValue());
@@ -264,56 +323,38 @@ public class KitInstance
         MCPlayer.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(0d);
         MCPlayer.setVelocity(new Vector(0d, 0d, 0d));
         MCPlayer.setFallDistance(0f);
-        MCPlayer.getInventory().clear();
 
-        UpdateSuper();
-        UpdateGadget();
+        SetSuperCharge(0);
+        UpdateGadgetItem();
         UpdateAttributes();
-
-        Kit.MarkKitAsUsed(ActiveKit);
-        ActiveKit.Load(this);
     }
 
     public void OnUnloadEvent()
     {
-        ActiveKit.Unload(this);
+        ActiveKit.OnUnloadEvent(this);
         Kit.UnMarkKitAsUsed(ActiveKit);
     }
 
     public void OnTickEvent()
     {
-        MCPlayer.setInvulnerable(_immunityTicks > 0);
+        ActiveKit.OnTickEvent(this);
 
-        if ((_respawnTimer > 0) && (_respawnTimer != Integer.MAX_VALUE))
-        {
-            TickRespawn();
-        }
-
-        _maxHealth.Tick();
-        _movementSpeed.Tick();
-        _damageScale.Tick();
-        _meleeAttackSpeed.Tick();
-        _armor.Tick();
-        _knockBackResistance.Tick();
-        UpdateAttributes();
+        TickImmunity();
+        TickRespawn();
+        TickAttributes();
+        TickGadget();
+        TickHealth();
 
         MCPlayer.setFoodLevel(10);
-
-        _gadgetRechargeTimer--;
-        if (_gadgetRechargeTimer == 0)
-        {
-            UpdateGadget();
-        }
-
-        ActiveKit.Tick(this);
     }
 
     public void OnRespawnEvent()
     {
+        ActiveKit.OnRespawnEvent(this);
+
         _immunityTicks = 80; // 4 seconds.
         MCPlayer.setGameMode(GameMode.SURVIVAL);
         _game.OnPlayerRespawnEvent(GPlayer);
-        ActiveKit.OnRespawn(this);
     }
 
     public void OnPlayerDropItemEvent(PlayerDropItemEvent event)
@@ -325,6 +366,7 @@ public class KitInstance
     {
         event.setDamage(event.getDamage() * _damageScale.GetValue());
         ActiveKit.OnPlayerDamageEntityEvent(this, event);
+        ResetHealTimer();
     }
 
     public void OnPlayerDeathEvent(PlayerDeathEvent event)
@@ -333,15 +375,11 @@ public class KitInstance
         ActiveKit.OnPlayerDeathEvent(this, event);
 
         MCPlayer.setGameMode(GameMode.SPECTATOR);
-        if (MCPlayer.getLastDeathLocation() != null)
-        {
-            MCPlayer.teleport(MCPlayer.getLastDeathLocation());
-        }
     }
 
     public void OnPlayerInteractEvent(PlayerInteractEvent event)
     {
-        ActiveKit.OnPlayerInteractEvent(event);
+        ActiveKit.OnPlayerInteractEvent(this, event);
 
         if ((event.getItem() == null) || !event.getAction().isRightClick())
         {
@@ -358,51 +396,159 @@ public class KitInstance
         }
     }
 
+    public void OnPlayerTakeDamageEvent(EntityDamageEvent event)
+    {
+        ActiveKit.OnPlayerTakeDamageEvent(this, event);
+        ResetHealTimer();
+    }
+
+
 
     // Protected methods.
     protected void TickRespawn()
     {
+        if (_respawnTimer == Integer.MAX_VALUE)
+        {
+            return;
+        }
+
         _respawnTimer--;
+        if (_respawnTimer == 0)
+        {
+            OnRespawnEvent();
+        }
     }
 
+    protected void TickImmunity()
+    {
+        MCPlayer.setInvulnerable(_immunityTicks > 0);
+        _immunityTicks--;
+    }
 
     protected void UpdateSuper()
     {
+        ItemStack SuperItem = GetItemByPersistentData(_superDataNamespacedKey);
+        if (SuperItem == null)
+        {
+            return;
+        }
+
         if (IsSuperCharged())
         {
-            _superItem.setType(Material.ENCHANTED_BOOK);
-            _superItem.editMeta(meta -> meta.displayName(Component.text("Super")
+            SuperItem.setType(Material.ENCHANTED_BOOK);
+            SuperItem.editMeta(meta -> meta.displayName(Component.text("Super")
                     .color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)));
+
+            if (_previousSuperCharge != _superCharge)
+            {
+                MCPlayer.playSound(MCPlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.4f, 1f);
+                GPlayer.BSRPlayer.ActionBarManager.AddMessage(_superChargedMessage);
+            }
         }
         else
         {
-            _superItem.setType(Material.BOOK);
-            _superItem.editMeta(meta -> meta.displayName(Component.text("Super")
+            SuperItem.setType(Material.BOOK);
+            SuperItem.editMeta(meta -> meta.displayName(Component.text("Super")
                     .color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
         }
+
+        MCPlayer.setLevel(_superCharge);
+        MCPlayer.setExp(Math.max(0f, Math.min(GetSuperChargeProgress() - 0.0001f, 1f)));
     }
 
-    protected void UpdateGadget()
+    protected void ActivateSuper()
     {
+        ActiveKit.ActivateSuper(this);
+
+        Location EffectLocation = MCPlayer.getLocation().clone().add(0d, 1d, 0d);
+
+        MCPlayer.getWorld().playSound(EffectLocation,
+                Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 1f, 1f);
+        MCPlayer.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, EffectLocation, 30, 0.1d, 0.1d, 0.1d, 1d);
+        GPlayer.BSRPlayer.ActionBarManager.AddMessage(_superActivatedMessage);
+        SetSuperCharge(0);
+
+        ResetHealTimer();
+    }
+
+    protected void UpdateGadgetItem()
+    {
+        ItemStack GadgetItem = GetItemByPersistentData(_gadgetDataNamespacedKey);
+        if (GadgetItem == null)
+        {
+            return;
+        }
+
         if (_gadgetUsesLeft == 0)
         {
-            MCPlayer.getInventory().remove(_gadgetItem);
+            MCPlayer.getInventory().remove(GadgetItem);
             return;
         }
 
         if (IsGadgetCharged())
         {
-            _gadgetItem.setType(Material.LIME_DYE);
-            _gadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget (%d left)"
+            GadgetItem.setType(Material.LIME_DYE);
+            GadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget (%d left)"
                             .formatted(_gadgetUsesLeft))
                     .color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)));
         }
         else
         {
-            _gadgetItem.setType(Material.GRAY_DYE);
-            _gadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget (%d left)"
+            GadgetItem.setType(Material.GRAY_DYE);
+            GadgetItem.editMeta(meta -> meta.displayName(Component.text("Gadget (%d left)"
                             .formatted(_gadgetUsesLeft))
                     .color(NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
         }
+    }
+
+    protected void ActivateGadget()
+    {
+        ActiveKit.ActivateGadget(this);
+
+        MCPlayer.getWorld().playSound(MCPlayer.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN,
+                SoundCategory.PLAYERS, 1f, 2f);
+        GPlayer.BSRPlayer.ActionBarManager.AddMessage(_gadgetActivatedMessage);
+
+        ResetHealTimer();
+    }
+
+    protected void TickGadget()
+    {
+        _gadgetRechargeTimer--;
+        if (_gadgetRechargeTimer == 0)
+        {
+            UpdateGadgetItem();
+        }
+    }
+
+    protected void TickHealth()
+    {
+        _healTimer--;
+
+        if ((_healTimer == 0) && (MCPlayer.getHealth() < _maxHealth.GetValue()))
+        {
+            MCPlayer.setHealth(Math.max(0, Math.min(
+                    MCPlayer.getHealth() +  _maxHealth.GetValue() * _healAmount.GetValue(), _maxHealth.GetValue())));
+            _healTimer = (int)_repeatedHealTimerLimit.GetValue();
+            MCPlayer.playSound(MCPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_XYLOPHONE,
+                    SoundCategory.PLAYERS, 0.2f, 2f);
+        }
+    }
+
+    protected void ResetHealTimer()
+    {
+        BSRipoff.GetLogger().warning("Triggered reset timer");
+        _healTimer = (int)_initialHealTimerLimit.GetValue();
+    }
+
+    protected void TickAttributes()
+    {
+        _maxHealth.Tick();
+        _movementSpeed.Tick();
+        _damageScale.Tick();
+        _meleeAttackSpeed.Tick();
+        _armor.Tick();
+        _knockBackResistance.Tick();
+        UpdateAttributes();
     }
 }
