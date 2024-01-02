@@ -10,10 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 import org.bukkit.event.player.PlayerInteractEvent;
 import sus.keiger.bsripoff.BSRipoff;
+import sus.keiger.bsripoff.player.ui.UserInterfaceManager;
 
 public class BSRipoffPlayer
 {
@@ -21,6 +23,7 @@ public class BSRipoffPlayer
     public final Player MCPlayer;
     public final BSRPlayerGameData GameData;
     public final ActionbarManager ActionBarManager = new ActionbarManager();
+    public final UserInterfaceManager UIManager;
 
 
     // Private fields.
@@ -37,6 +40,7 @@ public class BSRipoffPlayer
 
         MCPlayer = mcPlayer;
         GameData = new BSRPlayerGameData(this);
+        UIManager = new UserInterfaceManager(this);
         SetState(BSRPlayerState.InLobby);
     }
 
@@ -84,12 +88,18 @@ public class BSRipoffPlayer
     public void OnTickEvent(ServerTickStartEvent event)
     {
         ActionBarManager.Tick(this);
+        UIManager.OnTickEvent();
 
         if (_state == BSRPlayerState.InGame)
         {
             GameData.GetGamePlayer().OnTickEvent(event);
-            return;
         }
+        else if (_state == BSRPlayerState.InLobby)
+        {
+            MCPlayer.setFoodLevel(20);
+        }
+
+
     }
 
     public void OnPlayerDropItemEvent(PlayerDropItemEvent event)
@@ -98,6 +108,7 @@ public class BSRipoffPlayer
         {
             GameData.GetGamePlayer().OnPlayerDropItemEvent(event);
         }
+        UIManager.OnPlayerDropItemEvent(event);
     }
 
     public void OnPlayerDamageEntityEvent(EntityDamageByEntityEvent event)
@@ -115,12 +126,14 @@ public class BSRipoffPlayer
             GameData.GetGamePlayer().OnPlayerDeathEvent(event);
         }
     }
+
     public void OnPlayerInteractEvent(PlayerInteractEvent event)
     {
         if (_state == BSRPlayerState.InGame)
         {
             GameData.GetGamePlayer().OnPlayerInteractEvent(event);
         }
+        UIManager.OnPlayerInteractEvent(event);
     }
 
     public void OnPlayerTakeDamageEvent(EntityDamageEvent event)
@@ -129,6 +142,11 @@ public class BSRipoffPlayer
         {
             GameData.GetGamePlayer().OnPlayerTakeDamageEvent(event);
         }
+    }
+
+    public void OnInventoryClickEvent(InventoryClickEvent event)
+    {
+        UIManager.OnInventoryClickEvent(event);
     }
 
 
@@ -146,6 +164,9 @@ public class BSRipoffPlayer
         MCPlayer.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0d);
         MCPlayer.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(0d);
 
+        MCPlayer.setFoodLevel(20);
+        MCPlayer.setHealth(MCPlayer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+
         MCPlayer.setInvulnerable(true);
         MCPlayer.clearActivePotionEffects();
         MCPlayer.clearTitle();
@@ -153,7 +174,12 @@ public class BSRipoffPlayer
         MCPlayer.getInventory().clear();
 
         MCPlayer.teleport(BSRipoff.GetServerManager().GetSpawnLocation());
+
+        UIManager.SetEnabled(true);
     }
 
-    private void SetStateInGame() { }
+    private void SetStateInGame()
+    {
+        UIManager.SetEnabled(false);
+    }
 }

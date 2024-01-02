@@ -1,22 +1,29 @@
 package sus.keiger.bsripoff.player;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.apache.commons.lang.NullArgumentException;
+import sus.keiger.bsripoff.BSRipoff;
 
 public class ActionbarMessage
 {
     // Fields.
     public final int LifespanTicks;
+    public final int ID;
 
 
     // Private fields.
-    private int _timeExistedTicks = 0;
-    private int _id;
-    private TextComponent _contents;
+    private int _ticksLeft;
+    private Component _contents;
 
 
     // Constructors.
-    public ActionbarMessage(int lifespanTicks,TextComponent contents)
+    public ActionbarMessage(int lifespanTicks, Component contents)
+    {
+        this(lifespanTicks, contents, BSRipoff.GetPlugin().Rng.nextInt());
+    }
+
+    public ActionbarMessage(int lifespanTicks, Component contents, int id)
     {
         if (contents == null)
         {
@@ -24,15 +31,17 @@ public class ActionbarMessage
         }
 
         LifespanTicks = lifespanTicks;
+        _ticksLeft = LifespanTicks;
         _contents = contents;
+        ID = id;
     }
 
 
     // Methods.
     public boolean Tick()
     {
-        _timeExistedTicks++;
-        return _timeExistedTicks > LifespanTicks;
+        _ticksLeft--;
+        return _ticksLeft >= 0;
     }
 
     public void SetContents(TextComponent contents)
@@ -45,10 +54,12 @@ public class ActionbarMessage
         _contents = contents;
     }
 
-    public TextComponent GetContents() { return _contents; }
+    public Component GetContents() { return _contents; }
 
-    public void SetTimeExisted(int value)
+    public void SetRemainingLifetime(int value)
     {
-        _timeExistedTicks = Math.max(0, value);
+        _ticksLeft = Math.max(0, value);
     }
+
+    public int GetRemainingLifetime() { return _ticksLeft; }
 }

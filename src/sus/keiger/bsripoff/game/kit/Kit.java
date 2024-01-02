@@ -3,12 +3,6 @@ package sus.keiger.bsripoff.game.kit;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.apache.commons.lang.NullArgumentException;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import sus.keiger.bsripoff.game.Game;
@@ -78,8 +72,6 @@ public abstract class Kit
     // Fields.
     public final KitClass Classification;
 
-    /* Inventory. */
-    public boolean IsInventoryDroppable = false;
 
     /* Kit info. */
     public final ItemStack Icon;
@@ -93,20 +85,6 @@ public abstract class Kit
 
 
     // Private fields.
-    /* Attributes. */
-    private double _maxHealth = 20d;
-    private double _movementSpeed =0.1d;
-    private double _meleeAttackSpeed = 0d;
-    private double _armor = 0d;
-    private double _knockBackResistance = 0d;
-
-    /* Super. */
-    private int _maxSuperCharge = 100;
-
-    /* Gadget. */
-    private int _gadgetUses = 3;
-    private int _gadgetRechargeTime = 300; // 15 seconds.
-
     /* Kit info. */
     private KitStats Stats;
 
@@ -149,6 +127,7 @@ public abstract class Kit
 
 
     // Static methods.
+    /* Kit. */
     public static void TickKits()
     {
         for (Kit DefinedKit : s_activeKits.keySet())
@@ -220,55 +199,15 @@ public abstract class Kit
     }
 
 
-    // Methods.
-    public KitInstance CreateInstance(GamePlayer gPlayer, Game game)
-    {
-        return new KitInstance(gPlayer, game, this);
-    }
-
-    /* Events (called at specific times). */
-    public void OnLoadEvent(KitInstance instance)
-    {
-        instance.MCPlayer.getInventory().clear();
-        CreateInventory(instance, instance.MCPlayer.getInventory());
-    }
-
-    public void OnTickEvent(KitInstance instance) { }
-
-    public void OnStaticTickEvent() { }
-
-    public void OnPlayerDeathEvent(KitInstance instance, PlayerDeathEvent event) { }
-
-    public void OnRespawnEvent(KitInstance instance) { }
-
-    public void OnPlayerDamageEntityEvent(KitInstance instance, EntityDamageByEntityEvent event) { }
-
-    public void OnUnloadEvent(KitInstance instance) { }
-
-    public void OnPlayerDropItemEvent(KitInstance instance, PlayerDropItemEvent event)
-    {
-        if (!IsInventoryDroppable)
-        {
-            event.setCancelled(true);
-        }
-    }
-
-    public void OnPlayerInteractEvent(KitInstance instance, PlayerInteractEvent event) { }
-
-    public void OnPlayerTakeDamageEvent(KitInstance instance, EntityDamageEvent event) { }
-
-
-    /* Inventory. */
-    public abstract void CreateInventory(KitInstance instance, Inventory inventory);
-
-    public void AddAllFlags(ItemStack item)
+    /* Helper functions. */
+    public static void AddAllFlags(ItemStack item)
     {
         item.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
                 ItemFlag.HIDE_DYE, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS,
                 ItemFlag.HIDE_PLACED_ON, ItemFlag.HIDE_ARMOR_TRIM);
     }
 
-    public void FormatEquipment(ItemStack item, boolean isUnbreakable, TextComponent name)
+    public static void FormatEquipment(ItemStack item, boolean isUnbreakable, TextComponent name)
     {
         item.setUnbreakable(isUnbreakable);
         item.editMeta(meta -> meta.displayName(name.decoration(TextDecoration.ITALIC, false)));
@@ -276,49 +215,10 @@ public abstract class Kit
     }
 
 
-    /* Attributes. */
-    public double GetMaxHealth() { return _maxHealth; }
+    // Methods.
+    public abstract KitInstance CreateInstance(GamePlayer gPlayer, Game game);
 
-    public void SetMaxHealth(double value) { _maxHealth = value; }
-
-    public double GetMovementSpeedHealth() { return _movementSpeed; }
-
-    public void SetMovementSpeed(double value) { _movementSpeed = value; }
-
-    public double GetMeleeAttackSpeed() { return _meleeAttackSpeed; }
-
-    public void SetMeleeAttackSpeed(double value) { _meleeAttackSpeed = value; }
-
-    public double GetArmor() { return _armor; }
-
-    public void SetArmor(double value) { _armor = value; }
-
-    public double GetKnockbackResistance() { return _knockBackResistance; }
-
-    public void SetKnockbackResistance(double value) { _knockBackResistance = value; }
-
-
-    /* Super. */
-    public int GetMaxSuperCharge() { return _maxSuperCharge; }
-
-    public void SetMaxSuperCharge(int value)
-    {
-        _maxSuperCharge = Math.max(0, value);
-    }
-
-    public void ActivateSuper(KitInstance instance) { }
-
-
-    /* Gadget. */
-    public int GetGadgetUses() { return _gadgetUses; }
-
-    public void SetGadgetUses(int value) { _gadgetUses = value; }
-
-    public int GetGadgetRechargeTime() { return _gadgetRechargeTime; }
-
-    public void SetGadgetRechargeTime(int value) { _gadgetRechargeTime = value; }
-
-    public void ActivateGadget(KitInstance instance) { }
+    private void OnStaticTickEvent() { }
 
 
     /* Upgrades. */

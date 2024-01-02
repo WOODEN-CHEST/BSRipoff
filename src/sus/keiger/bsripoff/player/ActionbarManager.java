@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.apache.commons.lang.NullArgumentException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ActionbarManager
 {
@@ -14,8 +15,8 @@ public class ActionbarManager
 
 
     // Private fields.
-    private final ArrayList<ActionbarMessage> _actionbarMessages = new ArrayList<>();
-    private TextComponent _combinedActionbarMessage;
+    private final HashMap<Integer, ActionbarMessage> _actionbarMessages = new HashMap<>();
+    private Component _combinedActionbarMessage;
     private boolean _actionbarChanged = false;
 
 
@@ -34,7 +35,7 @@ public class ActionbarManager
 
         ArrayList<ActionbarMessage> MessagesToRemove = new ArrayList<>();
 
-        for (ActionbarMessage Message : _actionbarMessages)
+        for (ActionbarMessage Message : _actionbarMessages.values() )
         {
             if (Message.Tick())
             {
@@ -43,7 +44,13 @@ public class ActionbarManager
             }
         }
 
-        _actionbarMessages.removeAll(MessagesToRemove);
+        if (MessagesToRemove.size() > 0)
+        {
+            for (ActionbarMessage Message : MessagesToRemove)
+            {
+                _actionbarMessages.remove(Message);
+            }
+        }
 
         if (_actionbarChanged)
         {
@@ -66,12 +73,7 @@ public class ActionbarManager
         {
             return;
         }
-        if (!_actionbarMessages.contains(message))
-        {
-            _actionbarMessages.add(message);
-        }
-
-        message.SetTimeExisted(0);
+        _actionbarMessages.put(message.ID, message);
         _actionbarChanged = true;
     }
 
@@ -82,7 +84,7 @@ public class ActionbarManager
         TextComponent.Builder Builder = Component.text();
 
         boolean HadElement = false;
-        for (ActionbarMessage Message : _actionbarMessages)
+        for (ActionbarMessage Message : _actionbarMessages.values())
         {
             if (HadElement)
             {

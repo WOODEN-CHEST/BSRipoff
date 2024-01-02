@@ -9,15 +9,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Got something working.">
+    <list default="true" id="02347d75-80ca-4a0e-a807-5f663b5e7c91" name="Changes" comment="Did some stuff.">
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/DiamondRush.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKitInstance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ui/PageSwitchElement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ui/UserInterfaceElement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ui/UserInterfaceManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ui/UserInterfacePage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ui/UserInterfacePageSelection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ui/UserInterfacePageType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/BSRipoff.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/ServerEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GameMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/GamePlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/TwoTeamGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/Kit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/KitInstance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/SwardKit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValueModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/game/kit/value/KitModifiableValueModifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/ActionbarMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/BSRipoffPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitGadgetLevel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/KitStarPowerLevel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/PlayerKitData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sus/keiger/bsripoff/player/PlayerKitData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +88,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;shared-indexes&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -162,7 +180,14 @@
       <option name="project" value="LOCAL" />
       <updated>1703771236873</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Did some stuff.">
+      <created>1703802126847</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1703802126847</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -174,7 +199,8 @@
     <MESSAGE value="Tiny changes, nothing big, not at all." />
     <MESSAGE value="Minor changes." />
     <MESSAGE value="Got something working." />
-    <option name="LAST_COMMIT_MESSAGE" value="Got something working." />
+    <MESSAGE value="Did some stuff." />
+    <option name="LAST_COMMIT_MESSAGE" value="Did some stuff." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

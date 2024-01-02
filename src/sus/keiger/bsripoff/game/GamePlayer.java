@@ -9,6 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import sus.keiger.bsripoff.game.kit.KitInstance;
+import sus.keiger.bsripoff.player.BSRPlayerGameData;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
 public class GamePlayer
@@ -70,6 +71,8 @@ public class GamePlayer
             _kitInstance = BSRPlayer.GameData.GetSelectedKit().CreateInstance(this, CurrentGame);
         }
     }
+
+    public BSRPlayerGameData GetPlayerGameData() { return BSRPlayer.GameData; }
 
 
     /* Events. */

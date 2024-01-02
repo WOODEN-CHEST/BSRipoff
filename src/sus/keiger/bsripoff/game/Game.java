@@ -1,11 +1,16 @@
 package sus.keiger.bsripoff.game;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import sus.keiger.bsripoff.BSRipoff;
 import sus.keiger.bsripoff.player.BSRPlayerState;
 import sus.keiger.bsripoff.player.BSRipoffPlayer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public abstract class Game
@@ -86,6 +91,8 @@ public abstract class Game
 
         if (_state == GameState.PreGame)
         {
+            GPlayer.BSRPlayer.SetState(BSRPlayerState.InGame);
+            GPlayer.MCPlayer.setInvulnerable(true);
             OnPreStartEventPlayer(GPlayer);
         }
         else if (_state == GameState.InGame)
@@ -115,6 +122,8 @@ public abstract class Game
 
         return _players.get(bsrPlayer);
     }
+
+    public Collection<GamePlayer> GetPlayers() { return _players.values(); }
 
     public GameState GetState()
     {
@@ -190,6 +199,11 @@ public abstract class Game
         {
             OnPostEndEventPlayer(GPlayer);
         }
+
+        if (_map != null)
+        {
+            _map.CopyFromSource();
+        }
     }
 
     public final void Tick()
@@ -204,22 +218,60 @@ public abstract class Game
 
     public void OnPlayerDeathEvent(GamePlayer gamePlayer, PlayerDeathEvent event) { }
 
-    public  void OnPlayerRespawnEvent(GamePlayer player) { }
+    public void OnPlayerRespawnEvent(GamePlayer gPlayer) { }
+
+    public void OnPlayerQuitEvent(PlayerQuitEvent event)
+    {
+        BSRipoffPlayer BSRPlayer = BSRipoff.GetServerManager().GetBSRPlayer(event.getPlayer());
+
+        if ((_state == GameState.InGame) || (_state== GameState.PreGame) || (_state == GameState.PostGame))
+        {
+            OnPlayerQuitDuringGameEvent(_players.get(BSRPlayer));
+        }
+        else if (_state == GameState.Lobby)
+        {
+            OnPlayerQuitDuringLobbyStageEvent(_players.get(BSRPlayer));
+        }
+
+        _players.remove(BSRPlayer);
+        if ((_players.size() == 0) && ((_state == GameState.InGame)
+                || (_state== GameState.PreGame) || (_state == GameState.PostGame)))
+        {
+            OnZeroPlayersDuringGameEvent();
+        }
+    }
+
+    public void OnPlayerDropItemEvent(PlayerDropItemEvent event) { }
+
+    public void OnPlayerDealDamageEvent(EntityDamageByEntityEvent event) { }
+
+    public void OnPlayerTickDuringRespawnEvent(GamePlayer gPlayer, int respawnTimer) { }
 
 
     // Protected methods.
+    protected final void ForceSetState(GameState state)
+    {
+        if (state == null)
+        {
+            throw new NullArgumentException("state is null");
+        }
+
+        _state = state;
+    }
+
+
+
+    /* Ticking. */
     protected void TickPreGame() { }
     protected void TickInGame() { }
 
     protected void TickPostGame() { }
 
+
+    /* Events. */
     protected void OnPreStartEvent() { }
 
-    protected void OnPreStartEventPlayer(GamePlayer gPlayer)
-    {
-        gPlayer.BSRPlayer.SetState(BSRPlayerState.InGame);
-        gPlayer.MCPlayer.setInvulnerable(true);
-    }
+    protected void OnPreStartEventPlayer(GamePlayer gPlayer) { }
 
     protected void OnStartEvent() { }
 
@@ -252,13 +304,13 @@ public abstract class Game
         gPlayer.BSRPlayer.SetState(BSRPlayerState.InLobby);
     }
 
-    protected void ForceSetState(GameState state)
-    {
-        if (state == null)
-        {
-            throw new NullArgumentException("state is null");
-        }
+    protected void OnPlayerQuitDuringLobbyStageEvent(GamePlayer gPlayer) { }
 
-        _state = state;
+    protected void OnPlayerQuitDuringGameEvent(GamePlayer gPlayer) { }
+
+    protected void OnZeroPlayersDuringGameEvent()
+    {
+        End();
+        PostEnd();
     }
 }

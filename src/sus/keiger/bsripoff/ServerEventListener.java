@@ -7,12 +7,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import sus.keiger.bsripoff.game.Game;
+import sus.keiger.bsripoff.game.GameMap;
 import sus.keiger.bsripoff.game.kit.Kit;
 
 
@@ -76,10 +78,17 @@ public class ServerEventListener implements Listener
         }
     }
 
+    @EventHandler
+    public void OnInventoryClickEvent(InventoryClickEvent event)
+    {
+        BSRipoff.GetServerManager().GetBSRPlayer((Player)event.getWhoClicked()).OnInventoryClickEvent(event);
+    }
+
     /* Server. */
     @EventHandler
     public void OnTickEvent(ServerTickStartEvent event)
     {
+        GameMap.TickCopying();
         Kit.TickKits();
         Game.TickGames();
         BSRipoff.GetServerManager().OnTickEvent(event);

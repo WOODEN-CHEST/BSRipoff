@@ -16,6 +16,7 @@ public class GameMap
     public final Location MapSourceLocation;
     public final Location MapLocation;
     public final Vector Size;
+    public final String Name;
 
 
     // Private static fields.
@@ -33,7 +34,7 @@ public class GameMap
 
 
     // Constructors.
-    public GameMap(Location mapLocation, Vector size, Location mapSourceLocation, Location spawnLocation)
+    public GameMap(Location mapLocation, Vector size, Location mapSourceLocation, Location spawnLocation, String name)
     {
         if (mapSourceLocation == null)
         {
@@ -47,11 +48,16 @@ public class GameMap
         {
             throw new NullArgumentException("map size is null");
         }
+        if (name == null)
+        {
+            throw new NullArgumentException("map size is null");
+        }
 
         MapLocation = mapLocation;
         MapSourceLocation = mapSourceLocation;
         Size = size;
         SetSpawnLocation(spawnLocation);
+        Name = name;
     }
 
 

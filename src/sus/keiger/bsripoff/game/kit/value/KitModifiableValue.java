@@ -3,13 +3,14 @@ package sus.keiger.bsripoff.game.kit.value;
 import org.apache.commons.lang.NullArgumentException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class KitModifiableValue
 {
     // Private fields.
     private double _baseValue;
-    private final List<KitModifiableValueModifier> _modifiers = new ArrayList<>();
+    private final HashMap<Integer, KitModifiableValueModifier> _modifiers = new HashMap<>();
 
 
     // Constructors.
@@ -29,7 +30,7 @@ public class KitModifiableValue
 
         ArrayList<KitModifiableValueModifier> ModifiersToRemove = new ArrayList<>();
 
-        for (KitModifiableValueModifier Modifier : _modifiers)
+        for (KitModifiableValueModifier Modifier : _modifiers.values())
         {
             if (Modifier.Tick())
             {
@@ -39,7 +40,7 @@ public class KitModifiableValue
 
         for (KitModifiableValueModifier Modifier : ModifiersToRemove)
         {
-            _modifiers.remove(Modifier);
+            _modifiers.remove(Modifier.ID);
         }
     }
 
@@ -63,28 +64,28 @@ public class KitModifiableValue
         double ResultingValue = _baseValue;
 
         // Fist add, then multiply, then raise, finally divide.
-        for (KitModifiableValueModifier Modifier : _modifiers)
+        for (KitModifiableValueModifier Modifier : _modifiers.values())
         {
             if (Modifier.Operator == KitModifiableValueOperator.Add)
             {
                 ResultingValue += Modifier.Value;
             }
         }
-        for (KitModifiableValueModifier Modifier : _modifiers)
+        for (KitModifiableValueModifier Modifier : _modifiers.values())
         {
             if (Modifier.Operator == KitModifiableValueOperator.Multiply)
             {
                 ResultingValue *= Modifier.Value;
             }
         }
-        for (KitModifiableValueModifier Modifier : _modifiers)
+        for (KitModifiableValueModifier Modifier : _modifiers.values())
         {
             if (Modifier.Operator == KitModifiableValueOperator.Exponent)
             {
                 ResultingValue = Math.pow(ResultingValue, Modifier.Value);
             }
         }
-        for (KitModifiableValueModifier Modifier : _modifiers)
+        for (KitModifiableValueModifier Modifier : _modifiers.values())
         {
             if (Modifier.Operator == KitModifiableValueOperator.Divide)
             {
@@ -107,7 +108,7 @@ public class KitModifiableValue
             throw new NullArgumentException("modifier is null");
         }
 
-        _modifiers.add(modifier);
+        _modifiers.put(modifier.ID, modifier);
     }
 
     public void RemoveModifier(KitModifiableValueModifier modifier)
@@ -117,6 +118,11 @@ public class KitModifiableValue
             throw new NullArgumentException("modifier is null");
         }
 
-        _modifiers.remove(modifier);
+        _modifiers.remove(modifier.ID);
+    }
+
+    public void RemoveModifier(int id)
+    {
+        _modifiers.remove(id);
     }
 }
